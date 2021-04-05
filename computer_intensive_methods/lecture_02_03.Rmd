@@ -1,0 +1,150 @@
+---
+title Lecture 2 & 3
+output html_notebook
+---
+
+# Approximation Probability and Distribution Functions
+## Approximate Transformation of Random Variables
+
+- Use the relationship between random variables to have an easier approximation.
+- Eg. approximate chi-square random variable with standard normal distribution.
+
+```{r}
+# generate a random sample of size n of chi squares values
+chisq_approximation <- function(n, p){
+  (qnorm(p) + sqrt(2*n -1))^2
+}
+
+n <- 10
+p <- c(0.05, 0.10, 0.25, 0.50, 0.75, 0.90, 0.95)
+appr <- chisq_approximation(n = n, p = p)
+exact <- qchisq(p, n)
+diff <- exact - appr
+x <- data.frame(p=p, 
+                approximation=appr,
+                exact=exact, 
+                difference=diff
+                )
+x
+```
+
+Seems like quite close for this two.
+
+## Closed Form Approximation
+- [closed-form meant the formula can be evaluated in a finite number of standard operations](httpsen.wikipedia.orgwikiClosed-form_expression)
+- used to fit an approximating function that is simpler in form but models the behavior of a given probability function F(X)
+- polynomial or rational fraction approximating function is typically used.
+- probabilities of F distribution may be computed using this type of approximation.
+- [Horner's rule](httpsen.wikipedia.orgwikiHorner%27s_method)
+
+```{r}
+horner_computation <- function(x, a){
+  
+  n <- length(a)
+  h <- a[n]*x + a[n-1]
+  for (i in (n-2):1){
+    h = h*x + a[i]
+  }
+  return(h)
+}
+
+a <- c(1, 0.278, 0.23, 0.001, 0.078)
+x <- seq(0, 1, 0.2)
+horner_computation(x = x, a = a)
+```
+## General Series Expansion
+- Not going through in details
+- First few terms is used in general, truncation.
+- In tutorial got explanation about the Taylor series expansion
+- Cornish-Fisher normalizing expansion
+
+## Exact Realtionships between Distributions
+- F and Beta are related through cdf.
+
+## Numerical Root Finding
+- given cdf F(x) and good algorithm evaluating F(Xx), to compute the percentage point $x_p$, for given p, the standard numerical root finding methods may be used
+  - F(x) - p = 0
+- General Methods (not for global root)
+  - Newton's method
+  - Secant method (have potential numeric problems)
+  - Bisection method (converge slowest among 3 but does not use derivative and cdf  pdf)
+  - Convergent criteria can be based on $x_{i+1} - x_i$ and  or $f(x_{i+1})$ or functions of these functions
+  
+```{r}
+root_finding_func <- function(x){
+  pnorm(x) - 0.95
+}
+
+bisection_root <- function(x){
+  y = vector()
+  y[1] = root_finding_func(x[1])
+  y[2] = root_finding_func(x[2])
+  
+  if (sign(y[1]) != sign(y[2])) 
+    {
+    while (abs(root_finding_func(x[2]) - root_finding_func(x[1])) > 1.0e-6)
+      {
+      new <- sum(x) / 2
+      if (root_finding_func(new) != 0.0)
+        {
+          y = root_finding_func(new)
+          
+          if (y*root_finding_func(x[1]) < 0) 
+            x[2] <- new
+
+          if (y*root_finding_func(x[2]) < 0)
+            x[1] <- new
+          }
+      }
+    } else
+      {
+        print('The interval selected does not contain the root. Please select another interval.')
+      }
+  answer <- new
+  return(answer)
+}
+x <- c(1.5, 2)
+bisection_root(x)
+```
+## Continued Fractions
+- For pdf and cdf.
+- This type of expansion for some functions are utilized by statistical computing algorithms.
+- These fractions provide an accurate and efficient means for approximating the function which gives rise to the continued fraction.
+- Methods to evaluate continued fraction
+  - Forward Recurrence is used together with a convergence criterion to obtain adequate  approximation if number of iterations is not known.
+  - Backward Recurrence is more resistant to rounding errors.
+  
+## Gaussian Quadrature
+- class of methods for numerical integration
+- Different Quadrature (depends on a and b range for integration)
+  - Legendre-Gauss (finite range of a and b)
+  - Jacobi-Gauss
+  - Laguerre-Gauss
+  - Hermite-Gauss
+  - Chebyshev-Gauss
+  - w(x) is used for the convergence and also determine which Quadrature to use.
+  - lead to truncation of the interval or transformation of the interval
+  - composite quadraturee may also be used where the interval of integration is divided into several subintervals with low-order quadrature formula for each subintervals.
+- Statmod (gauss.quad)
+- [slide 13](httpsmath.unm.edu~jehanzebfilesteachingfa19math375lecture17.pdf)
+  - for general range of (-1, 1) it's just applying gauss.quad
+  - when the range become (-3, 3) it's just doing a transformation where it become 3  integration of range (-1, 1) 3t with respect to t.
+  - that why it become dnorm(3 a$nodes) 3
+  - usually the approximation should be less than 1
+```{r}
+library(statmod)
+gauss_approx <- vector()
+for (n in 2:6)
+  {
+  a <- gauss.quad(n = n, kind='legendre')
+  func <- dnorm(3* a$nodes)* 3
+  gauss_approx[n] <- sum(a$weights * func)
+  
+}
+gauss_approx
+
+pnorm(3) - pnorm(-3)
+```
+## Newton-Cotes Quadrature
+- Adjusted to equally spaced (for codes it's in terms of nodes)
+- Do refer to the link in the slide 13 to understand more on quadrature.

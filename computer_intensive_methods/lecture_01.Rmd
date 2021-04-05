@@ -1,0 +1,219 @@
+---
+title: "Lecture 1"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+# Data
+
+- collection of records
+- Type of Data (typeof)
+  - Boolean
+  - Integers
+  - Character
+  - Floating point numbers
+  - Missing Values: NA
+  - is.numeric, is.na, is.character
+  
+Operators
+
+- +, -, *, /, ^, %% (modulus), %/%(integer division)
+- <=, <, >=, >, ==, !=
+- &, |
+
+Floating-Point Numbers
+
+- a fraction times an exponent, such as 1.25 x 10^3
+- the more bits in the fraction part, the higher the precision
+- single (32 bits) & double (64 bits) precision
+- finite precision caused arithmetic performed on real numbers is not equal to that of arithmetic on double-type of numbers
+- eg. 0.15 != 3 * 0.05
+- Error
+  - Blunders (careless mistake avoid at all cost)
+  - Errors due to use of an approximate computational method
+  - Errors due to approximation imposed by the computer, caused by finite precision represented in computer, which caused truncation error.Further arithmetic operations may introduce other errors due to chopping of fractions in floating-point methods
+- Error in floating-point computations
+  - absolute error = observed / calculated value - true value
+  - relative error = absolute error / true value 
+  - True value vs C-True Value
+  - direct error analysis method & inverse error analysis method
+    - inverse error analysis method is often used. focus on assessment of rounding error (defined with respect to c-true value) at each intermediate stage of computations.
+    - when rounding error be close to 0, rounding errors can flip signs
+    - for exact comparison, it is better to use all.equal()
+
+```{r}
+0.15 - 3*0.05
+```
+```{r}
+all.equal(0.15-3*0.05, 0)
+```
+
+# Vectors
+c() concatenates individual data to form a vector, and all values are of the same type.
+
+```{r}
+x <- c(1, 3, 5, 7, 9)
+x
+is.vector(x)
+```
+```{r}
+y <- c(-1, -3, -5, 7, -9)
+x+y
+```
+```{r}
+x + c(-1, -3)
+```
+what happened here is the vector c(-1, -3) broadcast itself to be the same length. however it's not recommended to in such way.
+
+```{r}
+x < 4
+```
+```{r}
+identical(x, -y)
+```
+
+```{r}
+all.equal(x, -y)
+```
+We don't use == to avoid potential problem raised from floating point numbers
+
+```{r}
+mean(x)
+var(x)
+sum(x)
+sort(x)
+hist(x)
+```
+# Arrays
+complicated structure than vector but all values are of  the same type
+
+```{r}
+x <- c(1, 2, 3, 4)
+y <- array(x, dim = c(2, 2))
+y
+```
+
+```{r}
+dim(y)
+is.vector(y)
+is.array(y)
+typeof(y)
+str(y)
+which(y >= 3)
+rowSums(y)
+```
+# Matrices
+a matrix is basically a 2D array.
+
+```{r}
+x <- matrix(c(4, 5, 6, 7), nrow = 2, byrow = TRUE)
+x
+
+x <- matrix(c(4, 5, 6, 7), nrow = 2, byrow = FALSE)
+x
+
+is.array(x)
+is.matrix(x)
+
+# transpose
+t(x)
+
+# determinant
+det(x)
+
+# diag
+diag(x)
+
+# matrix multiplication
+y <- matrix(rep(5, 6), ncol = 3)
+y
+
+x %*% y
+
+# must follow proper dimension
+# y %*% x 
+
+# there is no shape for the z which will matched the dimension of x automatically.
+z <- c(7, 8)
+x
+x %*% z
+z %*% x
+
+rowMeans(x)
+
+apply(x, 1, mean)
+
+``` 
+```{r}
+x
+x[2, 1]
+```
+# List
+can contain data of not the same type
+
+```{r}
+z <- list('abc', 10, FALSE)
+z
+is.character(z[[1]])
+
+z[1]
+z[[1]]
+
+names(z) <- c('alpha', 'beta', 'gamma')
+z$alpha
+
+z$extra <- 1
+z
+
+z$extra <- NULL
+z
+```
+# Data Frame
+Data table with rows for cases and columns for variables, can contain different data types, cannot do matrix multiplication on a data frame.
+
+```{r}
+colnames(x) <- c('v1', 'v2')
+# cannot access the values 
+# x$v1
+```
+```{r}
+x.dataframe <- data.frame(x, v3=c(TRUE, FALSE))
+x.dataframe
+
+x.dataframe$v1
+x.dataframe[, 'v1']
+
+colMeans(x.dataframe)
+
+rbind(x.dataframe, list(v1=9, v2=8, v3=TRUE))
+
+rbind(x.dataframe, c(9, 8, 1))
+```
+# Function: Solve
+can solve simultaneous equation, or inverts a matrix
+
+```{r}
+A <- matrix(c(3, 4, 5, 6), nrow=2)
+b <- c(100, 50)
+
+solve(A, b)
+
+A %*% solve(A,b)
+
+solve(A)
+
+A %*% solve(A)
+```
+# Function: Eigen
+
+```{r}
+x
+eigen(x)
+class(eigen(x))
+str(eigen(x))
+
+x %*% eigen(x)$vectors[, 2]
+
+eigen(x)[[1]][[2]]
+```
