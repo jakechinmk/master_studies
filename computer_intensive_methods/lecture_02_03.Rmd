@@ -3,6 +3,13 @@ title: "Lecture 2 & 3"
 output: "html_notebook"
 ---
 
+# Links
+- [video part 1](https://drive.google.com/drive/u/2/folders/1M2I5vQkHrpXZsB5_h4j6s0dYUYTnva3c) - until horner's computation
+- [video part 2](https://drive.google.com/drive/u/2/folders/1M2I5vQkHrpXZsB5_h4j6s0dYUYTnva3c) - until newton-cotes quadrature
+- [video part 3](https://drive.google.com/drive/u/2/folders/1M2I5vQkHrpXZsB5_h4j6s0dYUYTnva3c) - until students' t distribution
+- [video part 4](https://drive.google.com/drive/u/2/folders/1M2I5vQkHrpXZsB5_h4j6s0dYUYTnva3c) - until chi-square distribution
+- [evernote link](https://www.evernote.com/shard/s574/sh/b9fd8d95-953a-41e3-9451-5eb3f13b8450/539725721d7d9ba72ce97eda542bc7f3) - these notes are belongs to Dr. Ng Choung Min.
+
 # Approximation Probability and Distribution Functions
 ## Approximate Transformation of Random Variables
 
@@ -187,7 +194,6 @@ qnorm(0.05)
 ```
 
 ```{r}
-## need further look into it
 error <- 1
 x_p <- 0
 
