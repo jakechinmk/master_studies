@@ -1,6 +1,6 @@
 ---
-title Lecture 2 & 3
-output html_notebook
+title: "Lecture 2 & 3"
+output: "html_notebook"
 ---
 
 # Approximation Probability and Distribution Functions
@@ -147,4 +147,155 @@ pnorm(3) - pnorm(-3)
 ```
 ## Newton-Cotes Quadrature
 - Adjusted to equally spaced (for codes it's in terms of nodes)
-- Do refer to the link in the slide 13 to understand more on quadrature.
+- Do refer to the link in the slide 13 to understand more on gaussian quadrature.
+- Can be used to approximate the P(a < x < b)
+
+## Normal Distribution
+- Most mathematical software provide evaluation of error function associated with the normal distribution and its complement
+- $$erf(x) = 2(\pi)^{-1/2} \int_{0}^x exp(-t^2) dt$$
+- $$erfc(x) = s(\pi)^{-1/2} \int_{x}^\infty exp(-t^2) dt = 1 - erf(x) $$
+- P(-x < y < x), Y~N(0, 1/2)
+- pnorm() $\Phi{(x)}$
+- More accurate method - use a rational fraction approximation with approximately 7-decimal place accuracy
+- gauinv()
+- to solve $1 - \Phi{(x)} = p$
+
+```{r}
+## closed form approximation technique
+c_vector <- c(2.515517,
+              0.802853,
+              0.010328
+              )
+d_vector <- c(1,
+              1.432788,
+              0.189269,
+              0.001308
+              )
+p <- 0.05
+t <- (-2*log(p))^(1/2)
+numerator <- horner_computation(x=rep(t, length(c_vector)-1),
+                                a=c_vector)[1]
+denominator <- horner_computation(x=rep(t, length(d_vector)-1),
+                                  a=d_vector)[1]
+y_p <- t - numerator / denominator
+if (p < 0.5)
+  y_p = -y_p
+
+y_p
+
+qnorm(0.05)
+```
+
+```{r}
+## need further look into it
+error <- 1
+x_p <- 0
+
+
+gauinv <- function(p, x_p, error){
+  
+  lim <- 10e-20
+  p_vector <- c(-0.322232431088,
+                -1.0,
+                -0.342242088547,
+                -0.0204231210245,
+                -0.453642210148*10e-4
+                )
+  q_vector <- c(0.0993484626060,
+                0.588581570495,
+                0.531103462366,
+                0.103537752850,
+                0.38560700634*10e-2
+                )
+  if (p > 0.5) 
+    p = 1 - p
+  
+  if (p < lim)
+    return(x_p)
+  
+  error <- 0
+  
+  if (p == 0.5)
+    return(x_p)
+  
+  y <- log(1/p^2) ^ (1/2)
+  y <- rep(y, length(p_vector)-1)
+  numerator <- horner_computation(x = y,
+                                 a = p_vector)[1]
+  denominator <- horner_computation(x = y,
+                                   a = q_vector)[1]
+  x_p = y[1] + numerator / denominator
+  
+  if (p < 0.5)
+    x_p = - x_p
+  
+  return(x_p)
+}
+
+gauinv(0.05, 0, 1)
+qnorm(0.05)
+```
+## Students' T Distribution
+- $$P(t|n) = 2[1 - T(t|n)]$$
+- $$P(t|n) = 2f(t|n)(\frac{\sqrt{n}}{y}) [\frac{1}{n} + \frac{y^2}{2(n+2)} + \frac{1*3y^4}{2*4(n+4)} + \frac{5y^6}{16(n+6)} + ...] $$
+- where f(t|n) is the pdf of t distribution
+- we are using this to approximate T distribution T(t|n) so that we don't have to go through the integration step.
+
+```{r}
+t_approximation <- function(t, n){
+  u = 1 + t^2/n
+  p = c(0)
+  q = c(0)
+  q[2] = 2*dt(t, n)*(n*u)^(1/2)
+  p[2] = q[2] / n
+  
+  error <- abs(p[2] - p[1])
+  k <- 2
+  i <- 2
+  while (error > 1.0e-5)
+    {
+    q[i+1] <- q[i] * (k-1) / (k*u)
+    p[i+1] <- p[i] + q[i+1] / (n+k)
+    error <- abs(p[i+1] - p[i])
+    k <- k + 2
+    i <- i + 1
+  }
+  return(p)
+}
+
+n <- 15
+t <- c(2)
+t_approximation(t = t, n = n)
+```
+
+## Beta Distribution
+- $$I_{x}(a, b) = \frac{1}{\beta(a, b)} \int_{0}^{x}{y^{a-1}(1-y)^{b-1} dy}$$ where 0<=x<=1, a>b, b >0
+- beta distribution is also related to several other important distributions such as
+  - Binomial $I_{p}(a, k-a + 1)$ where k is the n in binomial.
+  - Negative binomial $I_{q}(a, k)$ where k is n-j + 1 and q is the probability of failure.
+  - Student's t $I_{x}(\frac{n}{2}, \frac{1}{2}) = 2[1 - T(t|n)]$ where $x = \frac{n}{n+t^2}$.
+  - F $I_{x}(\frac{n_2}{2},\frac{n_1}{2}) = 1 - F(y|n_1, n_2)$ where $x = \frac{n_2}{n_2 + n_1y}$
+- $I_{x}(a, b)$ is pbeta(x, a, b)
+
+## Chi Square Distribution
+- chi-square and poisson
+- $$1 - H(x|n) = \sum_{j}^{t-1}{\frac{m_j}{j!}e^{-m}}$$
+- $t = \frac{n}{2}, m=\frac{x}{2},$ n is an even integer
+- H(x|n) is given by pchisq(x, n)
+
+```{r}
+x <- 5
+n <- 6
+m <- x/2
+j <- 0:(n/2-1)
+
+chisq_cdf_approximation <- function(x, n){
+  m <- x/2
+  j <- 0:(n/2 - 1)
+  return(1 - sum(m^j/factorial(j) * exp(-m)))
+}
+
+chisq_cdf_approximation(x, n)
+pchisq(x, n)
+```
+
