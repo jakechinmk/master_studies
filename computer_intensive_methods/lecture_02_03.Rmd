@@ -35,6 +35,8 @@ x <- data.frame(p=p,
 x
 ```
 
+
+
 Seems like quite close for this two.
 
 ## Closed Form Approximation
@@ -65,7 +67,7 @@ horner_computation(x = x, a = a)
 - In tutorial got explanation about the Taylor series expansion
 - Cornish-Fisher normalizing expansion
 
-## Exact Realtionships between Distributions
+## Exact Relationships between Distributions
 - F and Beta are related through cdf.
 
 ## Numerical Root Finding

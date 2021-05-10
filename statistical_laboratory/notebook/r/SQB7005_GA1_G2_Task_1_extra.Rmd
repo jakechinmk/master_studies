@@ -1,0 +1,86 @@
+---
+title: "SQB7005 Assignment 1 - Group 2 (additional plot for task 1)"
+output: html_notebook
+---
+
+Group Members
+- Yu Jing
+- Lam Kum Yee
+- Chin Mun Kit
+- Chang Qian Yi
+
+# Objective
+- Additional Interactive Plot to explore.
+
+```{r}
+library('plotly')
+path <- '../../data/DomesticBeer.csv'
+df <- read.csv(path)
+head(df)
+```
+
+
+```{r}
+summary(df)
+```
+
+```{r}
+sum(is.na(df))
+```
+```{r}
+fig1 <- plot_ly(x = df$Alcohol, type='histogram', name = 'Alcohol')
+fig2 <- plot_ly(x = df$Calories, type='histogram', name = 'Calories')
+fig3 <- plot_ly(x = df$Carbs, type='histogram', name = 'Carbs')
+fig <- subplot(fig1, fig2, fig3, nrows = 3)
+fig
+```
+
+
+
+```{r}
+fig <- plot_ly(df, y=~Alcohol, type='box', name='Alcohol', jitter=0.3, pointpos = -1.8)
+fig <- fig %>% add_trace(y=~Calories, name='Calories')
+fig <- fig %>% add_trace(y=~Carbs, name='Carbs')
+fig
+```
+```{r}
+fig1 <- plot_ly(df, y=~Alcohol, type='box', name='Alcohol %', jitter=0.3, pointpos = -1.8)
+fig1
+```
+
+
+```{r}
+fig2 <- plot_ly(df, y=~Calories, type='box', name='Calories per 12 ounce', jitter=0.3, pointpos = -1.8)
+fig2
+```
+
+
+```{r}
+fig3 <- plot_ly(df, y=~Carbs, type='box', name='Carbs(g) per 12 ounce', jitter=0.3, pointpos = -1.8)
+fig3
+```
+
+
+```{r}
+fig <- plot_ly(df, 
+               x = ~Alcohol, 
+               y = ~Calories, 
+               type='scatter', 
+               mode='markers', 
+               color = ~Carbs, 
+               colors = 'Reds', 
+               marker = list(size = ~Carbs, opacity = 0.5),
+               hoverinfo = 'text',
+               text = ~paste(
+                 'Brand:', Brand,
+                 '<br>Alcohols:', Alcohol,
+                 '<br>Calories:', Calories,
+                 '<br>Carbs:', Carbs
+                 
+                 )
+               )
+fig
+```
+
+
+

@@ -1,0 +1,23 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+g <- matrix(c(802, -400, -400, 200), nrow=2)
+
+theta <- c(1, -1.2)
+tol <- 1.0e-6
+f <- matrix(c(0,0), nrow=2)
+err <- c(1, 1)
+while(any(err>tol)){
+  f[1] <- sqrt(200) * (theta[2] - theta[1]^2)
+  f[2] <- sqrt(2) * (1- theta[1])
+  j <- matrix(c(-2*sqrt(200)*theta[1], -sqrt(2), sqrt(200), 0), nrow=2)
+  theta <- theta - solve(g) %*% t(j) %*% f
+  err <- abs(-solve(g) %*% t(j) %*% f)
+  print(err)
+}
+theta
+```
+

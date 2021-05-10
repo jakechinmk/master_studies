@@ -1,0 +1,18 @@
+---
+title: "Tutorial 1"
+output: html_notebook
+---
+
+# Question 4
+```{r}
+library(statmod)
+
+n <- 3
+a <- gauss.quad(n, kind='legendre')
+func <- 1/(a$nodes + 2)
+b <- sum(a$weights * func)
+b
+log(3)
+log(3) - b
+```
+

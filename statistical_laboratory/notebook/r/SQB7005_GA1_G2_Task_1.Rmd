@@ -1,0 +1,285 @@
+---
+title: "SQB7005 Assignment 1 - Group 2"
+output: html_notebook
+---
+
+Group Members
+- Yu Jing
+- Lam Kum Yee
+- Chin Mun Kit
+- Chang Qian Yi
+
+# Objective
+- visualize and analyse the data
+
+```{r}
+library(ggplot2)
+library(ggcorrplot)
+library(psych)
+library(MASS)
+library(broom)
+library(dplyr)
+```
+# Function
+```{r}
+plot_histogram <- function(data, variable, color, bins, title){
+  title <- paste('Histogram of', title)
+  fig <- (ggplot(data, aes_string(x=variable))
+          + geom_histogram(fill=color, bins=bins)
+          + labs(title = title)
+          + theme(plot.title=element_text(hjust = 0.5))
+          ) 
+  return(fig)
+}
+
+plot_boxplot <- function(data, variable, color, title){
+  title <- paste('Boxplot of', title)
+  fig <- (ggplot(data, aes_string(x=variable))
+          + geom_boxplot(varwidth = T, fill = color) 
+          + labs(title = title)
+          + theme(plot.title = element_text(hjust = 0.5))
+          )
+  return(fig)
+}
+```
+
+
+# Load Data
+```{r}
+path <- '../../data/DomesticBeer.csv'
+beer <- read.csv(path)
+```
+
+```{r}
+dim(beer)
+```
+The data has 128 rows and 4 columns which matched with the description of 128 brands and the columns are brands, alcohol (%), number of calories per 12 ounce and number of carbohydrates (g) per 12 ounce.
+
+```{r}
+colSums(is.na(beer))
+```
+No missing value in the data set.
+
+```{r}
+describe(beer)
+```
+The range of data are on different scale as expected. The standard deviation have a huge difference accross different variable too.
+
+# Visualization
+## Histogram
+### Alcohol
+```{r}
+fig <- plot_histogram(
+  data = beer,
+  variable = 'Alcohol',
+  color = 'steelblue',
+  bins = 20,
+  title = 'Alcohol (%)'
+)
+fig
+```
+From the histogram, we can see there are outliers.
+
+### Calories
+```{r}
+fig <- plot_histogram(
+  data = beer,
+  variable = 'Calories',
+  color = 'red',
+  bins = 20,
+  title = 'Calories per 12 ounce'
+)
+fig
+```
+We also can see there are some outliers at this plot for Calories.
+
+### Carbs
+```{r}
+fig <- plot_histogram(
+  data = beer,
+  variable = 'Carbs',
+  color = 'orange',
+  bins = 20,
+  title = 'Carbohydrates (g) per 12 ounce'
+)
+fig
+```
+From all 3 plots, we can observe that it seems there are outliers. It can be due to one of the brands have a different taste which then attract people to drink. So we are interested into investigate the boxplots to observe if there are any outliers on univariate basis.
+
+## Boxplot
+
+
+### Alcohol
+```{r}
+fig <- plot_boxplot(
+  data = beer,
+  variable = 'Alcohol',
+  color = 'steelblue',
+  title = 'Alchol (%)'
+)
+fig
+```
+From a univariate perspective, we can see plenty of outliers in alcohol (%).
+
+### Calories
+```{r}
+fig <- plot_boxplot(
+  data = beer,
+  variable = 'Calories',
+  color = 'red',
+  title = 'Calories per 12 ounce'
+)
+fig
+```
+There are also some outliers for Calories
+
+### Carbs
+```{r}
+fig <- plot_boxplot(
+  data = beer,
+  variable = 'Carbs',
+  color = 'orange',
+  title = 'Carbohydatres (g) per 12 ounce'
+)
+fig
+```
+
+### Correlation
+```{r}
+corr <- round(cor(beer[, -1]), 1)
+fig <- ggcorrplot(
+  corr, 
+  type = 'lower', 
+  lab = TRUE, 
+  method ='circle',
+  colors = c('tomato2', 'white', 'springgreen3'),
+  title = 'Correeogram of Beer Data Set'
+  )
+fig
+```
+We can observe that
+- calories have strong positive correlation with alcohol (%)
+- calories have strong positive correlation with carbohydrates.
+- alcohol have moderate positive correlation with carbohydrates.
+
+```{r}
+fig <- (ggplot(beer, aes(x=Alcohol, 
+                         y=Carbs, 
+ 
+                         size=Calories)) 
+        + geom_point(alpha=0.5, color='steelblue')
+        + geom_smooth(method=lm, color='red', se=TRUE, show.legend = FALSE)
+        + scale_size(range = c(.1, 10))
+        + labs(title = 'Bubble Plot with Alcohol (%), Carbs and Calories')
+        + theme(plot.title = element_text(hjust = 0.5))
+        )
+fig
+```
+
+The graph above illustrated a 3 dimension. We can observe that
+- as the percentage of alcohol increase, the calories (size of circle) increase.
+- as the carbohydrates increase, the calories (size of circle) increase.
+- However, it doesn't seems like alcohol and carbs have an obvious relationship but it definitely show a linear trend.
+
+## BarPlot
+```{r}
+beer$Company <- sapply(strsplit(beer$Brand, ' '), `[`, 1)
+company_freq <- count(beer, Company, sort=TRUE)
+fig <- (ggplot(company_freq, aes(x=reorder(Company, n), y=n)) 
+        + geom_bar(stat='identity') 
+        + theme(axis.text = element_text(size=6))  
+        + coord_flip()
+        )
+fig
+```
+We are also interested on what is the famous beer among all those brands.So we make an hypothesis that every company is the first name of the beer and look at how many product that they have. So in general, we found out that Sierra has the highest 12 different beers.
+
+We would like to look at the distribution of alcohols, calories & carbs for the top 5 beers.
+
+```{r}
+top_5_company <- company_freq[1:5, 'Company']
+mask <- beer$Company %in% top_5_company
+beer.top_5_company <- beer[mask, ]
+
+describe(beer.top_5_company)
+```
+Generally, these top 5 brands are having higher range compared to all of the brands. We can see this trend in the bubble plot too.
+
+```{r}
+fig <- (ggplot(beer.top_5_company, aes(x=Alcohol, 
+                                       y=Carbs,
+                                       size=Calories)) 
+        + geom_point(alpha=0.5, color='steelblue')
+        + geom_smooth(method=lm, color='red', se=TRUE, show.legend = FALSE)
+        + scale_size(range = c(.1, 10))
+        + labs(title = 'Bubble Plot with Alcohol (%), Carbs and Calories')
+        + theme(plot.title = element_text(hjust = 0.5))
+)
+fig
+```
+```{r}
+beer.copy <- beer
+beer.copy$top_5_companies <- ifelse(beer.copy$Company %in% top_5_company, 1, 0)
+fig <- (ggplot(beer.copy, aes(x=Alcohol, 
+                         y=Carbs,
+                         size=Calories,
+                         color=top_5_companies)) 
+        + geom_point(alpha=0.5)
+        + geom_smooth(method=lm, color='red', se=TRUE, show.legend = FALSE)
+        + scale_size(range = c(.1, 10))
+        + labs(title = 'Bubble Plot with Alcohol (%), Carbs and Calories')
+        + theme(plot.title = element_text(hjust = 0.5))
+)
+fig
+```
+```{r}
+mask <- beer.copy$top_5_companies == 1
+t.test(beer[mask, ]$Alcohol, beer[!mask,]$Alcohol)
+t.test(beer[mask, ]$Calories, beer[!mask,]$Calories)
+t.test(beer[mask, ]$Carbs, beer[!mask,]$Carbs)
+
+```
+
+# Regression
+```{r}
+full.model <- lm(Calories~Alcohol + Carbs + Alcohol*Carbs, data=beer)
+summary(full.model)
+```
+The model fitted adequately where it's R-squared able to explain 97.4% of the variation. However, the interaction between Alcohol and Carbs does not seem to be significant.
+
+```{r}
+step.model <- stepAIC(full.model, data=beer, trace=TRUE)
+summary(step.model)
+```
+As expected, after performing a stepwise regression, we can see that the interaction between Alcohol and Carbs are removed. Hence, we can conclude that Alcohol and Carbs have a linear relationship with Calories.
+
+
+## Model Adequacy
+```{r}
+model <- step.model
+plot(model)
+```
+### Linearity of Data
+```{r}
+plot(model, 1)
+```
+The graphs looks like a small funnel shape. We might need to do some transfomration against the variable.
+
+
+### Homogenity of Variance
+```{r}
+plot(model, 3)
+```
+The variablility (variances) of the residual points increases with the value of the fitted outcome variable, suggesting non-constant variances in the residual errors. We can try to use log or square root transformation of the outcome variable (y).
+
+```{r}
+model <- lm(log(Calories)~ Alcohol + log(Carbs), beer)
+summary(model)
+```
+
+```{r}
+plot(model)
+```
+
+# Reference
+[Regression Analysis](http://www.sthda.com/english/articles/39-regression-model-diagnostics/161-linear-regression-assumptions-and-diagnostics-in-r-essentials/)

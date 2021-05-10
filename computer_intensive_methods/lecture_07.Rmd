@@ -1,0 +1,41 @@
+---
+title: "lecture_07"
+output: html_notebook
+---
+ 
+Algorithm Slide 6
+```{r}
+A<- matrix(data=c(2,0,1,0,1,0,1,0,2), nrow=3, ncol=3)
+k<- 1
+r <- 0
+p <- nrow(A)
+eps <- 1.0e-10
+
+while (k <= p){
+  d <- A[k, k]
+  if (abs(d) < eps)
+  {
+    A[k, ] <- 0
+    A[, k] <- 0
+  }
+  else
+  {
+    A[k, ] <- A[k, ] / d
+    print(A[k, ])
+    r <- r + 1
+    for (i in 1:p)
+    {
+      if (i!=k)
+      {
+        c1 <- A[i, k]
+        A[i, ] <- A[i, ] - c1*A[k, ]
+        A[i, k] <- -c1/d
+        A[k, k] <- 1/d
+        
+      }
+    }
+  }
+  k <- k + 1
+}
+
+```
