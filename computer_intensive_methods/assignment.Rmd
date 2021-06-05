@@ -1,0 +1,326 @@
+---
+title: "EM Algorithm"
+output: html_notebook
+---
+# GMM Implementation
+```{r}
+
+# the mu.vector, sd.vector, alpha.vector is best initialize with kmeans.
+step.estimation <- function(x, k, mu.vector, sd.vector, alpha.vector)
+{
+  N <- length(x)
+  prod <- matrix(nrow = N, ncol = k)
+  for (i in 1:k)
+  {
+    prod[, i] <- dnorm(x, mu.vector[i], sd.vector[i]) * alpha.vector[i]
+  }
+  
+  sum.of.comps <- rowSums(prod)
+  
+  sum.of.comps.ln <- log(sum.of.comps)
+  sum.of.comps.ln.sum <- sum(sum.of.comps.ln)
+  comps.posterior <- prod / sum.of.comps
+  list("loglik" = sum.of.comps.ln.sum,
+       "posterior.df" = comps.posterior
+       )
+}
+
+step.maximization <- function(x, k, posterior.df)
+{
+  comps.n <- colSums(posterior.df)
+  y <- matrix(rep(x, k), ncol = k)
+  comps.mu <- 1/comps.n * colSums(posterior.df * x)
+  comps.var <- colSums(posterior.df * (t(t(y) - comps.mu))^2) * 1/comps.n
+  comps.alpha <- comps.n / length(x)
+  
+  list("mu" = comps.mu,
+       "sd" = sqrt(comps.var),
+       "alpha" = comps.alpha
+       )
+}
+
+# user can have two modes which are either choosing a fixed number of iterations or loop until convergence by setting num_iter = -1.
+gmm_em <- function(x, k, mu.vector, sd.vector, alpha.vector, num_iter, tol=1.0e-7, max_iterations=10000)
+{
+  e.step <- step.estimation(x, k, mu.vector, sd.vector, alpha.vector)
+  m.step <- step.maximization(x, k, e.step$posterior.df)
+  cur.loglik <- e.step$loglik
+  loglik.vector <- e.step$loglik
+  loglik.diff <- 1
+  
+  if (num_iter == -1)
+  {
+    i <- 1
+
+    while(loglik.diff > tol)
+    {
+      i <- i + 1
+      e.step <- step.estimation(x, k, 
+                              m.step$mu, m.step$sd, m.step$alpha)
+      m.step <- step.maximization(x, k, e.step$posterior.df)
+      loglik.vector <- c(loglik.vector, e.step$loglik)
+      loglik.diff <- abs((cur.loglik - e.step$loglik))
+      cur.loglik <- e.step$loglik
+      if (i >= max_iterations)
+      {
+        print("Warning: Not convergent")
+        print("Number of Iterations: 10000")
+        print(i)
+        break
+      }
+    }
+  }
+  else
+  {
+    for (i in 1:num_iter)
+    {
+      e.step <- step.estimation(x, k, 
+                              m.step$mu, m.step$sd, m.step$alpha)
+      m.step <- step.maximization(x, k, e.step$posterior.df)
+      loglik.vector <- c(loglik.vector, e.step$loglik)
+      loglik.diff <- abs((cur.loglik - e.step$loglik))
+      if (loglik.diff < tol)
+      {
+        break
+      }
+      else
+      {
+        cur.loglik <- e.step$loglik   
+      }
+      
+    }
+  }
+  print(paste('Number of iterations:', i))
+  list("loglik.vector" = loglik.vector,
+       "m.step" = m.step,
+       "loglik.diff" = loglik.diff
+  )
+}
+```
+
+# Data from R
+## 2 Cluster
+```{r}
+library(dplyr)
+library(ggplot2)
+wait <- faithful$waiting
+
+wait.kmeans <- kmeans(wait, 2)
+wait.kmeans.cluster <- wait.kmeans$cluster
+
+wait.df <- tibble(x = wait, cluster = wait.kmeans.cluster)
+
+
+wait.summary.df <- wait.df %>%
+  group_by(cluster) %>%
+  summarize(mu = mean(x), variance = var(x), std = sd(x), size = n())
+
+wait.summary.df %>%
+  select(cluster, mu, variance, std)
+
+wait.summary.df <- wait.summary.df %>%
+  mutate(alpha = size / sum(size))
+
+wait.summary.df %>%
+  select(cluster, size, alpha)
+
+wait.df %>%
+  mutate(num = row_number()) %>%
+  ggplot(aes(y = num, x = x, color = factor(cluster))) +
+  geom_point() +
+  ylab("Values") +
+  ylab("Data Point Number") +
+  scale_color_discrete(name = "Cluster") +
+  ggtitle("K-means Clustering")
+```
+### Result (K Means Initialization)
+```{r}
+test <- gmm_em(wait, 2, wait.summary.df$mu, wait.summary.df$std, wait.summary.df$alpha, -1)
+m.step <- test$m.step
+m.step
+```
+### Result (Random Parameters Initialization)
+```{r}
+test <- gmm_em(wait, 2, c(20, 60), c(10, 10), c(0.5, 0.5), -1)
+m.step <- test$m.step
+m.step
+```
+### Checking with other libraries
+```{r}
+library(mixtools)
+gm <- normalmixEM(wait, k=2, lambda=wait.summary.df$alpha, mu=wait.summary.df$mu, sigma=wait.summary.df$std)
+
+gm$mu
+gm$sigma
+gm$lambda
+```
+### Plotting the Results
+```{r}
+plot_mix_comps <- function(x, mu, sigma, lam){
+  lam * dnorm(x, mu, sigma)
+}
+
+data.frame(x = wait) %>%
+  ggplot() +
+  geom_histogram(aes(x, ..density..), binwidth = 1, colour = "black", 
+                 fill = "white") +
+  stat_function(geom = "line", fun = plot_mix_comps,
+                args = list(m.step$mu[1], m.step$sd[1],
+                           lam = m.step$alpha[1]),
+                colour = "red", lwd = 1.5) +
+  stat_function(geom = "line", fun = plot_mix_comps,
+                args = list(m.step$mu[2], m.step$sd[2],
+                           lam = m.step$alpha[2]),
+                colour = "blue", lwd = 1.5) +
+  ylab("Density") +
+  xlab("Values") +
+  ggtitle("Final GMM Fitting")
+
+```
+
+## 4 Cluster
+```{r}
+wait <- faithful$waiting
+
+wait.kmeans <- kmeans(wait, 4)
+wait.kmeans.cluster <- wait.kmeans$cluster
+
+wait.df <- tibble(x = wait, cluster = wait.kmeans.cluster)
+
+
+wait.summary.df <- wait.df %>%
+  group_by(cluster) %>%
+  summarize(mu = mean(x), variance = var(x), std = sd(x), size = n())
+
+wait.summary.df %>%
+  select(cluster, mu, variance, std)
+
+wait.summary.df <- wait.summary.df %>%
+  mutate(alpha = size / sum(size))
+
+wait.summary.df %>%
+  select(cluster, size, alpha)
+
+wait.df %>%
+  mutate(num = row_number()) %>%
+  ggplot(aes(y = num, x = x, color = factor(cluster))) +
+  geom_point() +
+  ylab("Values") +
+  ylab("Data Point Number") +
+  scale_color_discrete(name = "Cluster") +
+  ggtitle("K-means Clustering")
+```
+
+### Result (K Means Initialization)
+```{r}
+test <- gmm_em(wait, 4, wait.summary.df$mu, wait.summary.df$std, wait.summary.df$alpha, -1)
+m.step <- test$m.step
+m.step
+```
+
+### Result (Random Parameters Initialization)
+```{r}
+test <- gmm_em(wait, 4, c(20, 30, 40, 60), rep(10, 4), rep(1/4, 4), -1)
+m.step <- test$m.step
+m.step
+```
+
+### Checking with other libraries
+```{r}
+library(mixtools)
+gm <- normalmixEM(wait, k=4, lambda=wait.summary.df$alpha, mu=wait.summary.df$mu, sigma=wait.summary.df$std)
+
+gm$mu
+gm$sigma
+gm$lambda
+```
+
+### Plotting the Results
+```{r}
+plot_mix_comps <- function(x, mu, sigma, lam){
+  lam * dnorm(x, mu, sigma)
+}
+
+data.frame(x = wait) %>%
+  ggplot() +
+  geom_histogram(aes(x, ..density..), binwidth = 1, colour = "black", 
+                 fill = "white") +
+  stat_function(geom = "line", fun = plot_mix_comps,
+                args = list(m.step$mu[1], m.step$sd[1],
+                           lam = m.step$alpha[1]),
+                colour = "red", lwd = 1.5) +
+  stat_function(geom = "line", fun = plot_mix_comps,
+                args = list(m.step$mu[2], m.step$sd[2],
+                           lam = m.step$alpha[2]),
+                colour = "blue", lwd = 1.5) +
+  stat_function(geom = "line", fun = plot_mix_comps,
+              args = list(m.step$mu[3], m.step$sd[3],
+                         lam = m.step$alpha[3]),
+              colour = "yellow", lwd = 1.5) +
+  stat_function(geom = "line", fun = plot_mix_comps,
+              args = list(m.step$mu[4], m.step$sd[4],
+                         lam = m.step$alpha[4]),
+              colour = "green", lwd = 1.5) +
+  ylab("Density") +
+  xlab("Values") +
+  ggtitle("Final GMM Fitting")
+
+```
+
+# Testing with own sample
+```{r}
+data <- c(rnorm(200, mean = 20, sd = 5), rnorm(100, mean = 25, sd=5))
+data.kmeans <- kmeans(data, 2)
+data.kmeans.cluster <- data.kmeans$cluster
+
+
+data.df <- tibble(x = data, cluster = data.kmeans.cluster)
+
+
+data.summary.df <- data.df %>%
+  group_by(cluster) %>%
+  summarize(mu = mean(x), variance = var(x), std = sd(x), size = n())
+
+data.summary.df %>%
+  select(cluster, mu, variance, std)
+
+data.summary.df <- data.summary.df %>%
+  mutate(alpha = size / sum(size))
+
+data.summary.df %>%
+  select(cluster, size, alpha)
+
+data.df %>%
+  mutate(num = row_number()) %>%
+  ggplot(aes(y = num, x = x, color = factor(cluster))) +
+  geom_point() +
+  ylab("Values") +
+  ylab("Data Point Number") +
+  scale_color_discrete(name = "Cluster") +
+  ggtitle("K-means Clustering")
+```
+
+### Result (K Means Initialization)
+```{r}
+test <- gmm_em(data, 2, data.summary.df$mu, data.summary.df$std, data.summary.df$alpha, -1)
+m.step <- test$m.step
+m.step
+```
+
+### Result (Random Parameter Initialization)
+```{r}
+test <- gmm_em(data, 2, c(10, 15), rep(10, 2), rep(1/2, 2), -1)
+
+test$m.step
+```
+
+```{r}
+gm <- normalmixEM(data, k=2, lambda=rep(1/2, 2), mu=c(5, 5), sigma=rep(10, 2))
+
+gm$mu
+gm$sigma
+gm$lambda
+
+```
+
+
