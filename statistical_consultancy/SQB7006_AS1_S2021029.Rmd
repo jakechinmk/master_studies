@@ -1,0 +1,135 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+contigency_table <- matrix(c(114,203,7,42), nrow = 2)
+dimnames(contigency_table) <- list(age = c('>25', '<=25'),
+                                   status = c('controls', 'cancer')
+                                   )
+contigency_table
+```
+```{r}
+chisq.test(contigency_table)
+```
+As p-value 0.004 is less than 0.05 significance level, we reject null hypothesis and conclude that age and cancer are statistically significant associated.
+
+```{r}
+library('gplots')
+dt <- as.table(contigency_table)
+balloonplot(t(dt), main ="Cervical Cancer", xlab ="", ylab="",
+            label = TRUE, show.margins = FALSE)
+```
+
+
+```{r}
+library('epitools')
+riskratio.wald(contigency_table)
+```
+The estimated relative risk with 95% C.I are 1.3721, 6.3996
+
+```{r}
+path <- './datasets/thrombosis.dat'
+thrombosis <- read.table(path, header = TRUE)
+thrombosis
+```
+```{r}
+t.test(thrombosis$normal, thrombosis$diabetic)
+```
+
+```{r}
+t.test(log(thrombosis$normal), log(thrombosis$diabetic))
+```
+```{r}
+library(ggplot2)
+boxplot(thrombosis)
+mean <- sapply(thrombosis, mean)
+points(mean, col='red')
+boxplot(log(thrombosis))
+mean <- sapply(log(thrombosis), mean)
+points(mean, col='red')
+```
+```{r}
+path <- './datasets/diabetic_mice.csv'
+mice <- read.csv(path)
+mice
+```
+ 
+```{r}
+boxplot(albumen ~ group, mice)
+mean <- tapply(mice$albumen, mice$group, mean)
+points(mean, col='red')
+```
+```{r}
+res.aov <- aov(albumen ~ group, mice)
+summary(res.aov)
+```
+```{r}
+64357 / (64357 + 1037470)
+```
+```{r}
+boxplot(albumen^2 ~ group, mice)
+```
+```{r}
+library('readxl')
+path = './usair.xlsx'
+usair = read_excel(path)
+usair$names <- do.call(rbind, strsplit(usair$Cities, '-', perl=TRUE))[, 1]
+usair$names <- gsub('st. ', 'saint ', usair$names)
+
+library(maps)
+mapping <- us.cities
+mapping$names <- tolower(do.call(rbind, strsplit(mapping$name, ' (?=[^ ]+$)', perl=TRUE))[, 1])
+
+cities_needed <- data.frame()
+for (i in 1:length(usair$names))
+{
+    cities_needed <- rbind(cities_needed, mapping[grep(paste('^', usair$names[i], '$', sep=''), mapping$names)[1], ])
+}
+usair <- cbind(usair, cities_needed)
+cols <- c('Y','X1','X2','X3','X4','X5','X6')
+data <- cbind(usair[cols], 
+              lat=cities_needed$lat, 
+              long=cities_needed$long)
+```
+
+```{r}
+data
+```
+```{r}
+library(MASS)
+model <- lm(Y ~ ., data[, c(-8, -9)])
+summary(model)
+
+step.model <- stepAIC(model, direction = "both", 
+                      trace = FALSE)
+summary(step.model)
+plot(step.model)
+```
+```{r}
+model <- lm(Y ~ ., data)
+summary(model)
+
+step.model <- stepAIC(model, direction = "both", 
+                      trace = FALSE)
+summary(step.model)
+plot(step.model)
+```
+```{r}
+library(ggplot2)
+data.plot <- usair[, c('name', 'country.etc', 'Y')]
+data.plot
+```
+```{r}
+MainStates <- map_data("state")
+AllCounty <- map_data("county")
+p <- ggplot() + geom_polygon( data=AllCounty, aes(x=long, y=lat, group=group),
+                color="darkblue", fill="lightblue", size = .1 ) +
+  
+          geom_polygon( data=MainStates, aes(x=long, y=lat, group=group),
+                color="black", fill="lightblue",  size = 1, alpha = .3) + geom_point(data=data, aes(x=long, y=lat, size=Y, alpha=X2), color='red') + labs(title='Concentration of Sulphur Dioxide in Selected US Cities')
+p
+```
+ 
+ 
