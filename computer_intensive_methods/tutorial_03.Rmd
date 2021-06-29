@@ -62,4 +62,9 @@ eq2
 B
 A %*% eq2
 ```
+# Question 4
+- part a and part b doing analytically
+```{r}
+
+```
 

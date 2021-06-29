@@ -1,0 +1,40 @@
+---
+title: "Lecture 13"
+output: html_notebook
+---
+
+# Gibb Sampling
+```{r}
+set.seed(12)
+y <- 0.5
+x <- 0
+n <- 1000
+m <- 20 # parameter for the binomial distribution
+p <- 2
+q <- 2
+
+for (i in 1:n)
+{
+  x[i] <- rbinom(1, m, y[i])
+  y[i+1] <- rbeta(1, x[i] + p, m - x[i] +q)
+}
+```
+```{r}
+y[1:20]
+x[1:20]
+```
+```{r}
+y[300:320]
+x[300:320]
+```
+
+```{r}
+y[800:820]
+x[800:820]
+```
+
+# Metropolis Algorithm
+```{r}
+
+```
+

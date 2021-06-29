@@ -1,0 +1,54 @@
+---
+title: "Lecture 10 Variance Reduction Techniques"
+output: html_notebook
+---
+# 2021/05/11
+# Page 5
+```{r}
+set.seed(123)
+n <- 20
+u <- runif(n)
+h <- exp(u)
+theta.est1 <- mean(h)
+variance1 <- var(h) / n
+
+theta.est1
+variance1
+
+# exact value
+theta <- exp(1) - 1
+theta
+
+m <- n/2
+u1 <- runif(m)
+h1 <- c(exp(u1), exp(1-u1))
+
+theta.est2 <- mean(h1)
+## just to imagine
+## var(h1) / 2 is the original variance, /n is because you got n sample
+## h1[1:m], h1[(m+1):n] is because you concat the two sample into 1 series
+## /2 is also original formula, /n because n sample.
+variance2 <- var(h1) / 2 / n + cov(h1[1:m], h1[(m+1):n]) / 2 /n
+
+
+theta.est2
+variance2
+```
+
+# 2021/05/25
+# Page 7
+```{r}
+set.seed(128)
+n <- 200
+u <- runif(n)
+x <- exp(u)
+xbar <- mean(x)
+c_star <- -cov(x, u) / var(u)
+estimate <- xbar + c_star*(mean(u) - 0.5)
+estimate
+
+mean(x)
+var(x)
+
+exp(1) - 1
+```

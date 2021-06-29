@@ -292,3 +292,28 @@ z
 # Non-Uniform Random Numbers
 - use cdf to generate non-uniform random numbers
 - can only use when cdf can be inverted
+
+```{r}
+n <- 10000
+theta <- 1
+y <- runif(n)
+x <- -theta*log(1-y)
+ks.test(x, "pexp")
+```
+
+# Use of Mixture of Distributions
+- instead of using cdf directly, we decompose into several components.
+- so that is easier to invert
+
+
+## Butler Methods
+```{r}
+ 
+```
+
+
+## Rejection Methods
+```{r}
+
+```
+

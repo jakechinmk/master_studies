@@ -1,0 +1,77 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Q1
+```{r}
+A <- matrix(c(10, -3, 6, 2,
+              -3, 14, -7, 3,
+              6, -7, 14, -2,
+              2, 3, -2, 6
+              ), byrow = T, nrow = 4)
+A
+
+b <- c(38.5, 34.0, 4.5, 41.5)
+b
+
+answer <- solve(A, b)
+answer
+```
+
+```{r}
+eq1 <- solve(t(chol(A)), b)
+eq2 <- solve(chol(A), eq1)
+
+chol(A)
+eq2
+```
+Q2
+```{r}
+set.seed(123)
+
+x <- c(73, 61, 29, 45, 21, 33, 37, 48, 21, 30, 24, 89, 3, 23, 56, 55,
+       46, 70, 67, 55, 43, 28, 41, 22, 51, 63, 15, 25, 29, 35, 9, 12,
+       18, 20, 55, 47, 32, 16, 22, 59, 50, 27, 67, 25, 38, 27, 19, 24,
+       33, 40
+)
+
+
+theta <- mean(x)
+theta_hat <- vector()
+n <- length(x)
+
+for (i in (1:n)){
+  y <- x[-i]
+  theta_hat[i] <- mean(y)
+}
+
+theta_bar <- mean(theta_hat)
+bias_hat <- (n - 1) * (theta_bar - theta)
+adjusted_estimator <- theta - bias_hat
+# variance_hat <- (n - 1) * var(theta_hat)
+variance_hat <- ((n-1)/n) * sum((theta_hat - theta)^2)
+mse_hat <- variance_hat + bias_hat ^ 2
+
+
+theta_bar
+adjusted_estimator
+
+mse_hat
+lci <- theta - 1.96 * sqrt(variance_hat)
+uci <- theta + 1.96 * sqrt(variance_hat)
+
+lci
+uci
+
+quantile(sort(theta_hat),c(0.025, 0.975))
+```
+```{r}
+p <- vector()
+for (i in (1:n)){
+  y <- x[-i]
+  p[i] <- pnorm((1/n * sum(y - theta)), 0.5, sqrt(variance_hat))
+}
+mean(p[i])
+```
+

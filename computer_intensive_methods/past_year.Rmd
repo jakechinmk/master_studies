@@ -1,0 +1,93 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# question 1
+```{r}
+n <- 1000
+r <- 3
+p <- 0.6
+test.sample <- rnbinom(n, r, p)
+test.p.vec <- pnbinom(test.sample, 3, 0.6)
+```
+
+
+```{r}
+n <- 1000
+r <- 3
+p <- 0.6
+p.vec <- (1-p)^r
+
+
+u <- runif(n)
+
+for (i in 1:n)
+{
+  p.vec[i+1] <- (p*(r+i-1) / i) * p.vec[i]
+}
+Fk <- cumsum(p.vec)
+x <- integer(n)
+for (i in 1:n)
+{
+  x[i] <- as.integer(sum(u[i] > Fk))
+}
+
+hist(x)
+hist(rnbinom(1000, 3, 0.6))
+```
+suppose we gonna generate random variate x from a gamma distribution (px), given m(x), q(x) = m(x) / c
+
+Q1 b iii
+
+```{r}
+n <- 300
+alpha <- 0.65
+Z <- c()
+
+M <- function(x, a)
+{
+  (a*2^(a-1))/gamma(a+1) * (1- exp(-x/2))^(a-1) * exp(-x/2)
+}
+i <- 1
+while (i <= 300)
+{
+  X <- rgamma(1, alpha)
+  Y <- runif(1)
+  if (Y <= X/M(X, alpha))
+  {
+    Z[i] <- X
+    i <- i +1
+  }
+}
+
+```
+
+```{r}
+set.seed(128)
+n <- 1000
+
+generate.Bernoulli <- function(n, p)
+{
+  u <- runif(n)
+  sample <- ifelse(u<=p, 1, 0)
+  return(sample)
+}
+
+generate.Binomial <- function(n,p, n_samples)
+{
+  sample <- c()
+  for (i in 1:n_samples)
+  {
+    x <- generate.Bernoulli(n, p)
+    sample <- c(sample, sum(x))
+  }
+  sample
+}
+
+sample <- generate.Binomial(5, 0.3, 100)
+```
+
+
+
+

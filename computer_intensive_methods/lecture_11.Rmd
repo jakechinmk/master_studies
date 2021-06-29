@@ -1,0 +1,59 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Page 3
+```{r}
+set.seed(128)
+n <- 30
+S <- 0
+I <- 0
+
+while (I<n)
+{
+  u <- runif(1)
+  I <- I + 1
+  S <- S + exp(exp(u)) # your function
+}
+
+S / n
+```
+```{r}
+#page 3
+set.seed(128)
+n <- 30000
+S <- 0
+I <- 0
+
+u <- runif(n)
+S <- mean(exp(exp(u)))
+S 
+```
+# page 8
+```{r}
+set.seed(128)
+n <- 2000
+u1 <-  runif(n)
+u2 <- runif(n)
+M <- exp(exp(1))
+g <- exp(exp(u1))
+na <- sum(u2 <= (g/M)) # scale by M for range of 0 to 1
+I <- na* M / n # rescale later
+I
+```
+```{r}
+set.seed(128)
+n <- 200000
+u1 <-  runif(n)
+u2 <- runif(n)
+
+x <- 2*u1 - 1
+y <- 2*u2 - 1
+z <- ifelse((x^2 + y^2) <=1, 1, 0)
+na <- sum(z)
+I <- na / n
+I*4
+pi
+```
+

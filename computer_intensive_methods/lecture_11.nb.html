@@ -215,299 +215,92 @@ pre code {
 
 
 <!-- rnb-text-begin -->
-<div id="guided-exercise-page-5" class="section level1">
-<h1>Guided Exercise (Page 5)</h1>
-<p>s is the variance</p>
+<p>Page 3</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueCA8LSBjKDIsIDEwLCA0LCA3KVxubSA8LSBjKHhbMV0pXG5zIDwtIGMoMClcblxuZm9yIChqIGluIDE6KGxlbmd0aCh4KS0gMSkpe1xuICBtW2orMV0gPC0gbVtqXSArICh4W2orMV0gLSBtW2pdKSAvIChqKzEpXG4gIHNbaisxXSA8LSAoMSAtIDEvaikqc1tqXSArIChqKzEpKihtW2orMV0gLSBtW2pdKV4yXG4gIFxufVxubVxuYGBgIn0= -->
-<pre class="r"><code>x &lt;- c(2, 10, 4, 7)
-m &lt;- c(x[1])
-s &lt;- c(0)
-
-for (j in 1:(length(x)- 1)){
-  m[j+1] &lt;- m[j] + (x[j+1] - m[j]) / (j+1)
-  s[j+1] &lt;- (1 - 1/j)*s[j] + (j+1)*(m[j+1] - m[j])^2
-  
-}
-m</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIuMDAwMDAwIDYuMDAwMDAwIDUuMzMzMzMzIDUuNzUwMDAwXG4ifQ== -->
-<pre><code>[1] 2.000000 6.000000 5.333333 5.750000</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc1xuYGBgIn0= -->
-<pre class="r"><code>s</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdICAwLjAwMDAwIDMyLjAwMDAwIDE3LjMzMzMzIDEyLjI1MDAwXG4ifQ== -->
-<pre><code>[1]  0.00000 32.00000 17.33333 12.25000</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="exercise-page-5" class="section level1">
-<h1>Exercise (Page 5)</h1>
-<p>mean = 3, meant for the parameter is = 1/3</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTI4KVxuXG5kIDwtIDAuMDVcbm4gPC0gMzBcbnkgPC0gcmV4cChuLCByYXRlPTEvMylcbnNkKHkpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTI4KVxubiA8LSAzMFxuUyA8LSAwXG5JIDwtIDBcblxud2hpbGUgKEk8bilcbntcbiAgdSA8LSBydW5pZigxKVxuICBJIDwtIEkgKyAxXG4gIFMgPC0gUyArIGV4cChleHAodSkpXG59XG5cblMgLyBuXG5gYGAifQ== -->
 <pre class="r"><code>set.seed(128)
-
-d &lt;- 0.05
 n &lt;- 30
-y &lt;- rexp(n, rate=1/3)
-sd(y)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDQuMDM2MjkzXG4ifQ== -->
-<pre><code>[1] 4.036293</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxud2hpbGUgKHNkKHkpL3NxcnQobikgPiBkKXtcblxuICB5MSA8LSByZXhwKDEsIHJhdGU9MS8zKVxuICB5IDwtIGMoeSwgeTEpXG4gIG4gPC0gbGVuZ3RoKHkpXG59XG5tZWFuKHkpXG5gYGAifQ== -->
-<pre class="r"><code>while (sd(y)/sqrt(n) &gt; d){
+S &lt;- 0
+I &lt;- 0
 
-  y1 &lt;- rexp(1, rate=1/3)
-  y &lt;- c(y, y1)
-  n &lt;- length(y)
+while (I&lt;n)
+{
+  u &lt;- runif(1)
+  I &lt;- I + 1
+  S &lt;- S + exp(exp(u))
 }
-mean(y)</code></pre>
+
+S / n</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDMuMDgzNDYzXG4ifQ== -->
-<pre><code>[1] 3.083463</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVuZ3RoKHkpXG5gYGAifQ== -->
-<pre class="r"><code>length(y)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDM4MThcbiJ9 -->
-<pre><code>[1] 3818</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDYuODUyNDUxXG4ifQ== -->
+<pre><code>[1] 6.852451</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="exercise-page-5-with-recurrence" class="section level1">
-<h1>Exercise (Page 5) with recurrence</h1>
-<!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTI4KVxuXG5kIDwtIDAuMDVcbm4gPC0gMzBcbnkgPC0gcmV4cChuLCByYXRlPTEvMylcbnYgPC0gYyh2YXIoeSkpXG5tIDwtIGMobWVhbih5KSlcbmkgPC0gMVxuXG53aGlsZSAoc3FydCh2W2ldKS9zcXJ0KG4pID4gZCl7XG4gIHkxIDwtIHJleHAoMSwgcmF0ZT0xLzMpXG4gIHkgPC0gYyh5LCB5MSlcbiAgbiA8LSBsZW5ndGgoeSlcbiAgbVtpICsgMV0gPC0gbVtpXSArICh5W25dIC0gbVtpXSkgLyBuXG4gIHZbaSArIDFdIDwtICgxIC0gMS8obi0xKSkqdltpXSArIG4gKiAobVtpKzFdIC0gbVtpXSleMlxuICBpIDwtIGkgKyAxXG59XG5tZWFuKHkpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTI4KVxubiA8LSAzMDAwMFxuUyA8LSAwXG5JIDwtIDBcblxudSA8LSBydW5pZihuKVxuUyA8LSBtZWFuKGV4cChleHAodSkpKVxuUyBcbmBgYCJ9 -->
 <pre class="r"><code>set.seed(128)
+n &lt;- 30000
+S &lt;- 0
+I &lt;- 0
 
-d &lt;- 0.05
-n &lt;- 30
-y &lt;- rexp(n, rate=1/3)
-v &lt;- c(var(y))
-m &lt;- c(mean(y))
-i &lt;- 1
-
-while (sqrt(v[i])/sqrt(n) &gt; d){
-  y1 &lt;- rexp(1, rate=1/3)
-  y &lt;- c(y, y1)
-  n &lt;- length(y)
-  m[i + 1] &lt;- m[i] + (y[n] - m[i]) / n
-  v[i + 1] &lt;- (1 - 1/(n-1))*v[i] + n * (m[i+1] - m[i])^2
-  i &lt;- i + 1
-}
-mean(y)</code></pre>
+u &lt;- runif(n)
+S &lt;- mean(exp(exp(u)))
+S </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDMuMDgzNDYzXG4ifQ== -->
-<pre><code>[1] 3.083463</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVuZ3RoKHkpXG5gYGAifQ== -->
-<pre class="r"><code>length(y)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDM4MThcbiJ9 -->
-<pre><code>[1] 3818</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDYuMjkwMjcyXG4ifQ== -->
+<pre><code>[1] 6.290272</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-</div>
-<div id="monte-carlo-simulation-page-6---7" class="section level1">
-<h1>Monte Carlo Simulation (Page 6 - 7)</h1>
+<div id="page-8" class="section level1">
+<h1>page 8</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTIzKVxudGhldGEgPC0gMzY1XG5uIDwtIDIwXG5rIDwtIDEwMDBcbnRoZXRhMSA8LSBjKDApXG50aGV0YTIgPC0gYygwKVxuXG5mb3IgKGogaW4gMTprKXtcbiAgeCA8LSByZXhwKG4sIDEvdGhldGEpXG4gIHRoZXRhMVtqXSA8LSAyKm1lYW4oeCkgLSAxXG4gIHRoZXRhMltqXSA8LSAoKG4rMSkqbWF4KHgpL24pIC0gMVxufVxuXG5tc2UxIDwtIHN1bSgodGhldGExIC0gdGhldGEpXjIpIC8ga1xubXNlMiA8LSBzdW0oKHRoZXRhMiAtIHRoZXRhKV4yKSAvIGtcbmVmZiA8LSBtc2UyIC8gbXNlMVxubXNlMVxuYGBgIn0= -->
-<pre class="r"><code>set.seed(123)
-theta &lt;- 365
-n &lt;- 20
-k &lt;- 1000
-theta1 &lt;- c(0)
-theta2 &lt;- c(0)
-
-for (j in 1:k){
-  x &lt;- rexp(n, 1/theta)
-  theta1[j] &lt;- 2*mean(x) - 1
-  theta2[j] &lt;- ((n+1)*max(x)/n) - 1
-}
-
-mse1 &lt;- sum((theta1 - theta)^2) / k
-mse2 &lt;- sum((theta2 - theta)^2) / k
-eff &lt;- mse2 / mse1
-mse1</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTI4KVxubiA8LSAyMDAwXG51MSA8LSAgcnVuaWYobilcbnUyIDwtIHJ1bmlmKG4pXG5NIDwtIGV4cChleHAoMSkpXG5nIDwtIGV4cChleHAodTEpKVxubmEgPC0gc3VtKHUyIDw9IChnL00pKVxuSSA8LSBuYSogTS9uXG5JXG5gYGAifQ== -->
+<pre class="r"><code>set.seed(128)
+n &lt;- 2000
+u1 &lt;-  runif(n)
+u2 &lt;- runif(n)
+M &lt;- exp(exp(1))
+g &lt;- exp(exp(u1))
+na &lt;- sum(u2 &lt;= (g/M))
+I &lt;- na* M/n
+I</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE2MDU5MS42XG4ifQ== -->
-<pre><code>[1] 160591.6</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXNlMlxuYGBgIn0= -->
-<pre class="r"><code>mse2</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEyNTk1ODNcbiJ9 -->
-<pre><code>[1] 1259583</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZWZmXG5gYGAifQ== -->
-<pre class="r"><code>eff</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDcuODQzMzk0XG4ifQ== -->
-<pre><code>[1] 7.843394</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>The one with smaller mse will be the better estimator. Hence MSE for theta 1 is a far lower. Hence theta 1 is better estimator. We can use eff to evaluate the estimator.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTIzKVxudGhldGEgPC0gMzY1XG5uIDwtIDUwXG5rIDwtIDEwMDBcbnRoZXRhMSA8LSBjKDApXG50aGV0YTIgPC0gYygwKVxuXG5mb3IgKGogaW4gMTprKXtcbiAgeCA8LSByZXhwKG4sIDEvdGhldGEpXG4gIHRoZXRhMVtqXSA8LSAyKm1lYW4oeCkgLSAxXG4gIHRoZXRhMltqXSA8LSAoKG4rMSkqbWF4KHgpL24pIC0gMVxufVxuXG5tc2UxIDwtIHN1bSgodGhldGExIC0gdGhldGEpXjIpIC8ga1xubXNlMiA8LSBzdW0oKHRoZXRhMiAtIHRoZXRhKV4yKSAvIGtcbmVmZiA8LSBtc2UyIC8gbXNlMVxubXNlMVxuYGBgIn0= -->
-<pre class="r"><code>set.seed(123)
-theta &lt;- 365
-n &lt;- 50
-k &lt;- 1000
-theta1 &lt;- c(0)
-theta2 &lt;- c(0)
-
-for (j in 1:k){
-  x &lt;- rexp(n, 1/theta)
-  theta1[j] &lt;- 2*mean(x) - 1
-  theta2[j] &lt;- ((n+1)*max(x)/n) - 1
-}
-
-mse1 &lt;- sum((theta1 - theta)^2) / k
-mse2 &lt;- sum((theta2 - theta)^2) / k
-eff &lt;- mse2 / mse1
-mse1</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE0NDMxOS43XG4ifQ== -->
-<pre><code>[1] 144319.7</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXNlMlxuYGBgIn0= -->
-<pre class="r"><code>mse2</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE4ODA3NjlcbiJ9 -->
-<pre><code>[1] 1880769</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZWZmXG5gYGAifQ== -->
-<pre class="r"><code>eff</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEzLjAzMTk3XG4ifQ== -->
-<pre><code>[1] 13.03197</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDYuNTM5MDY0XG4ifQ== -->
+<pre><code>[1] 6.539064</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTIzKVxudGhldGEgPC0gMzY1XG5uIDwtIDEwMFxuayA8LSAxMDAwXG50aGV0YTEgPC0gYygwKVxudGhldGEyIDwtIGMoMClcblxuZm9yIChqIGluIDE6ayl7XG4gIHggPC0gcmV4cChuLCAxL3RoZXRhKVxuICB0aGV0YTFbal0gPC0gMiptZWFuKHgpIC0gMVxuICB0aGV0YTJbal0gPC0gKChuKzEpKm1heCh4KS9uKSAtIDFcbn1cblxubXNlMSA8LSBzdW0oKHRoZXRhMSAtIHRoZXRhKV4yKSAvIGtcbm1zZTIgPC0gc3VtKCh0aGV0YTIgLSB0aGV0YSleMikgLyBrXG5lZmYgPC0gbXNlMiAvIG1zZTFcbm1zZTFcbmBgYCJ9 -->
-<pre class="r"><code>set.seed(123)
-theta &lt;- 365
-n &lt;- 100
-k &lt;- 1000
-theta1 &lt;- c(0)
-theta2 &lt;- c(0)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTI4KVxubiA8LSAyMDAwMDBcbnUxIDwtICBydW5pZihuKVxudTIgPC0gcnVuaWYobilcblxueCA8LSAyKnUxIC0gMVxueSA8LSAyKnUyIC0gMVxueiA8LSBpZmVsc2UoKHgqKjIgKyB5KioyKSA8PTEsIDEsIDApXG5uYSA8LSBzdW0oeilcbkkgPC0gbmEgLyBuXG5JKjRcbmBgYCJ9 -->
+<pre class="r"><code>set.seed(128)
+n &lt;- 200000
+u1 &lt;-  runif(n)
+u2 &lt;- runif(n)
 
-for (j in 1:k){
-  x &lt;- rexp(n, 1/theta)
-  theta1[j] &lt;- 2*mean(x) - 1
-  theta2[j] &lt;- ((n+1)*max(x)/n) - 1
-}
-
-mse1 &lt;- sum((theta1 - theta)^2) / k
-mse2 &lt;- sum((theta2 - theta)^2) / k
-eff &lt;- mse2 / mse1
-mse1</code></pre>
+x &lt;- 2*u1 - 1
+y &lt;- 2*u2 - 1
+z &lt;- ifelse((x**2 + y**2) &lt;=1, 1, 0)
+na &lt;- sum(z)
+I &lt;- na / n
+I*4</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEzNjI0Mi42XG4ifQ== -->
-<pre><code>[1] 136242.6</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDMuMTQ1MzRcbiJ9 -->
+<pre><code>[1] 3.14534</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXNlMlxuYGBgIn0= -->
-<pre class="r"><code>mse2</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGlcbmBgYCJ9 -->
+<pre class="r"><code>pi</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDI1NDA4MDVcbiJ9 -->
-<pre><code>[1] 2540805</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDMuMTQxNTkzXG4ifQ== -->
+<pre><code>[1] 3.141593</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZWZmXG5gYGAifQ== -->
-<pre class="r"><code>eff</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE4LjY0OTEyXG4ifQ== -->
-<pre><code>[1] 18.64912</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>the mse1 getting lower as the sample size increasing.</p>
-</div>
-<div id="bootstrap-sample" class="section level1">
-<h1>Bootstrap Sample</h1>
-<ul>
-<li>N is number of bootstrap sample</li>
-<li>n is sample size of each bootstrap sample</li>
-</ul>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTIzKVxuXG4jIHggaXMgc29tZSB2ZWN0b3JcbnggPC0gYygxLDIsMylcblxuIyBzYW1wbGUgc2l6ZSBvZiBib29zdHN0cmFwIHNhbXBsZVxubiA8LSA1XG5cbiMgbnVtYmVyIG9mIGJvb3RzdHJhcCBzYW1wbGVcbk4gPC0gMTAwXG50aGV0YSA8LSBtZWFuKHgpIFxuayA8LSAxXG50aGV0YV9oYXQgPC0gdmVjdG9yKClcbnUgPC0gcnVuaWYoMSlcblxud2hpbGUgKGsgPD0gTil7XG4gIGogPC0gMVxuICB3aGlsZSAoaiA8PSBuKXtcbiAgICBpIDwtIGZsb29yKG4gKiB1ICsgMSlcbiAgICB5IDwtIGMoeFtpXSlcbiAgICBqIDwtIGogKyAxXG4gIH1cbiAgXG4gIHRoZXRhX2hhdFtrXSA8LSBtZWFuKHkpIC8gblxuICBrIDwtIGsgKyAxXG59XG5cbnRoZXRhX3N0YXIgPC0gbWVhbih0aGV0YV9oYXQpXG5iaWFzX2hhdCA8LSB0aGV0YV9zdGFyIC0gdGhldGFcbnZhcmlhbmNlX2hhdCA8LSB2YXIodGhldGFfaGF0KVxubXNlX2hhdCA8LSB2YXJpYW5jZV9oYXQgKyBiaWFzX2hhdF4yXG5gYGAifQ== -->
-<pre class="r"><code>set.seed(123)
-
-# x is some vector
-x &lt;- c(1,2,3)
-
-# sample size of booststrap sample
-n &lt;- 5
-
-# number of bootstrap sample
-N &lt;- 100
-theta &lt;- mean(x) 
-k &lt;- 1
-theta_hat &lt;- vector()
-u &lt;- runif(1)
-
-while (k &lt;= N){
-  j &lt;- 1
-  while (j &lt;= n){
-    i &lt;- floor(n * u + 1)
-    y &lt;- c(x[i])
-    j &lt;- j + 1
-  }
-  
-  theta_hat[k] &lt;- mean(y) / n
-  k &lt;- k + 1
-}
-
-theta_star &lt;- mean(theta_hat)
-bias_hat &lt;- theta_star - theta
-variance_hat &lt;- var(theta_hat)
-mse_hat &lt;- variance_hat + bias_hat^2</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="jacknife-method" class="section level1">
-<h1>Jacknife Method</h1>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTIzKVxuXG4jIHggaXMgc29tZSB2ZWN0b3JcbnggPC0gYygxLDIsMylcbnRoZXRhIDwtIG1lYW4oeClcbnRoZXRhX3N0YXIgPC0gdmVjdG9yKClcbm4gPC0gbGVuZ3RoKHgpXG5cbmZvciAoaSBpbiAoMTpuKSl7XG4gIHkgPC0geFstaV1cbiAgdGhldGFfaGF0W2ldIDwtIG1lYW4oeSlcbn1cblxudGhldGFfYmFyX3N0YXIgPC0gbWVhbih0aGV0YV9oYXQpXG5iaWFzX2hhdCA8LSAobiAtIDEpICogKHRoZXRhX2Jhcl9zdGFyIC0gdGhldGEpXG5hZGp1c3RlZF9lc3RpbWF0b3IgPC0gdGhldGFfaGF0IC0gYmlhc19oYXRcbnZhcmlhbmNlX2hhdCA8LSB2YXIodGhldGFfaGF0KVxubXNlX2hhdCA8LSB2YXJpYW5jZV9oYXQgKyBiaWFzX2hhdCBeIDJcbmBgYCJ9 -->
-<pre class="r"><code>set.seed(123)
-
-# x is some vector
-x &lt;- c(1,2,3)
-theta &lt;- mean(x)
-theta_star &lt;- vector()
-n &lt;- length(x)
-
-for (i in (1:n)){
-  y &lt;- x[-i]
-  theta_hat[i] &lt;- mean(y)
-}
-
-theta_bar_star &lt;- mean(theta_hat)
-bias_hat &lt;- (n - 1) * (theta_bar_star - theta)
-adjusted_estimator &lt;- theta_hat - bias_hat
-variance_hat &lt;- var(theta_hat)
-mse_hat &lt;- variance_hat + bias_hat ^ 2</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIEd1aWRlZCBFeGVyY2lzZSAoUGFnZSA1KQ0KcyBpcyB0aGUgdmFyaWFuY2UNCmBgYHtyfQ0KeCA8LSBjKDIsIDEwLCA0LCA3KQ0KbSA8LSBjKHhbMV0pDQpzIDwtIGMoMCkNCg0KZm9yIChqIGluIDE6KGxlbmd0aCh4KS0gMSkpew0KICBtW2orMV0gPC0gbVtqXSArICh4W2orMV0gLSBtW2pdKSAvIChqKzEpDQogIHNbaisxXSA8LSAoMSAtIDEvaikqc1tqXSArIChqKzEpKihtW2orMV0gLSBtW2pdKV4yDQogIA0KfQ0KbQ0Kcw0KYGBgDQoNCiMgRXhlcmNpc2UgKFBhZ2UgNSkNCm1lYW4gPSAzLCBtZWFudCBmb3IgdGhlIHBhcmFtZXRlciBpcyA9IDEvMw0KYGBge3J9DQpzZXQuc2VlZCgxMjgpDQoNCmQgPC0gMC4wNQ0KbiA8LSAzMA0KeSA8LSByZXhwKG4sIHJhdGU9MS8zKQ0Kc2QoeSkNCg0Kd2hpbGUgKHNkKHkpL3NxcnQobikgPiBkKXsNCg0KICB5MSA8LSByZXhwKDEsIHJhdGU9MS8zKQ0KICB5IDwtIGMoeSwgeTEpDQogIG4gPC0gbGVuZ3RoKHkpDQp9DQptZWFuKHkpDQpsZW5ndGgoeSkNCmBgYA0KDQojIEV4ZXJjaXNlIChQYWdlIDUpIHdpdGggcmVjdXJyZW5jZQ0KYGBge3J9DQpzZXQuc2VlZCgxMjgpDQoNCmQgPC0gMC4wNQ0KbiA8LSAzMA0KeSA8LSByZXhwKG4sIHJhdGU9MS8zKQ0KdiA8LSBjKHZhcih5KSkNCm0gPC0gYyhtZWFuKHkpKQ0KaSA8LSAxDQoNCndoaWxlIChzcXJ0KHZbaV0pL3NxcnQobikgPiBkKXsNCiAgeTEgPC0gcmV4cCgxLCByYXRlPTEvMykNCiAgeSA8LSBjKHksIHkxKQ0KICBuIDwtIGxlbmd0aCh5KQ0KICBtW2kgKyAxXSA8LSBtW2ldICsgKHlbbl0gLSBtW2ldKSAvIG4NCiAgdltpICsgMV0gPC0gKDEgLSAxLyhuLTEpKSp2W2ldICsgbiAqIChtW2krMV0gLSBtW2ldKV4yDQogIGkgPC0gaSArIDENCn0NCm1lYW4oeSkNCmxlbmd0aCh5KQ0KYGBgDQoNCiMgTW9udGUgQ2FybG8gU2ltdWxhdGlvbiAoUGFnZSA2IC0gNykNCmBgYHtyfQ0Kc2V0LnNlZWQoMTIzKQ0KdGhldGEgPC0gMzY1DQpuIDwtIDIwDQprIDwtIDEwMDANCnRoZXRhMSA8LSBjKDApDQp0aGV0YTIgPC0gYygwKQ0KDQpmb3IgKGogaW4gMTprKXsNCiAgeCA8LSByZXhwKG4sIDEvdGhldGEpDQogIHRoZXRhMVtqXSA8LSAyKm1lYW4oeCkgLSAxDQogIHRoZXRhMltqXSA8LSAoKG4rMSkqbWF4KHgpL24pIC0gMQ0KfQ0KDQptc2UxIDwtIHN1bSgodGhldGExIC0gdGhldGEpXjIpIC8gaw0KbXNlMiA8LSBzdW0oKHRoZXRhMiAtIHRoZXRhKV4yKSAvIGsNCmVmZiA8LSBtc2UyIC8gbXNlMQ0KbXNlMQ0KbXNlMg0KZWZmDQpgYGANClRoZSBvbmUgd2l0aCBzbWFsbGVyIG1zZSB3aWxsIGJlIHRoZSBiZXR0ZXIgZXN0aW1hdG9yLiBIZW5jZSBNU0UgZm9yIHRoZXRhIDEgaXMgYSBmYXIgbG93ZXIuIEhlbmNlIHRoZXRhIDEgaXMgYmV0dGVyIGVzdGltYXRvci4gV2UgY2FuIHVzZSBlZmYgdG8gZXZhbHVhdGUgdGhlIGVzdGltYXRvci4NCmBgYHtyfQ0Kc2V0LnNlZWQoMTIzKQ0KdGhldGEgPC0gMzY1DQpuIDwtIDUwDQprIDwtIDEwMDANCnRoZXRhMSA8LSBjKDApDQp0aGV0YTIgPC0gYygwKQ0KDQpmb3IgKGogaW4gMTprKXsNCiAgeCA8LSByZXhwKG4sIDEvdGhldGEpDQogIHRoZXRhMVtqXSA8LSAyKm1lYW4oeCkgLSAxDQogIHRoZXRhMltqXSA8LSAoKG4rMSkqbWF4KHgpL24pIC0gMQ0KfQ0KDQptc2UxIDwtIHN1bSgodGhldGExIC0gdGhldGEpXjIpIC8gaw0KbXNlMiA8LSBzdW0oKHRoZXRhMiAtIHRoZXRhKV4yKSAvIGsNCmVmZiA8LSBtc2UyIC8gbXNlMQ0KbXNlMQ0KbXNlMg0KZWZmDQpgYGANCmBgYHtyfQ0Kc2V0LnNlZWQoMTIzKQ0KdGhldGEgPC0gMzY1DQpuIDwtIDEwMA0KayA8LSAxMDAwDQp0aGV0YTEgPC0gYygwKQ0KdGhldGEyIDwtIGMoMCkNCg0KZm9yIChqIGluIDE6ayl7DQogIHggPC0gcmV4cChuLCAxL3RoZXRhKQ0KICB0aGV0YTFbal0gPC0gMiptZWFuKHgpIC0gMQ0KICB0aGV0YTJbal0gPC0gKChuKzEpKm1heCh4KS9uKSAtIDENCn0NCg0KbXNlMSA8LSBzdW0oKHRoZXRhMSAtIHRoZXRhKV4yKSAvIGsNCm1zZTIgPC0gc3VtKCh0aGV0YTIgLSB0aGV0YSleMikgLyBrDQplZmYgPC0gbXNlMiAvIG1zZTENCm1zZTENCm1zZTINCmVmZg0KYGBgDQp0aGUgbXNlMSBnZXR0aW5nIGxvd2VyIGFzIHRoZSBzYW1wbGUgc2l6ZSBpbmNyZWFzaW5nLg0KDQoNCiMgQm9vdHN0cmFwIFNhbXBsZQ0KLSBOIGlzIG51bWJlciBvZiBib290c3RyYXAgc2FtcGxlDQotIG4gaXMgc2FtcGxlIHNpemUgb2YgZWFjaCBib290c3RyYXAgc2FtcGxlDQpgYGB7cn0NCnNldC5zZWVkKDEyMykNCg0KIyB4IGlzIHNvbWUgdmVjdG9yDQp4IDwtIGMoMSwyLDMpDQoNCiMgc2FtcGxlIHNpemUgb2YgYm9vc3RzdHJhcCBzYW1wbGUNCm4gPC0gNQ0KDQojIG51bWJlciBvZiBib290c3RyYXAgc2FtcGxlDQpOIDwtIDEwMA0KdGhldGEgPC0gbWVhbih4KSANCmsgPC0gMQ0KdGhldGFfaGF0IDwtIHZlY3RvcigpDQp1IDwtIHJ1bmlmKDEpDQoNCndoaWxlIChrIDw9IE4pew0KICBqIDwtIDENCiAgd2hpbGUgKGogPD0gbil7DQogICAgaSA8LSBmbG9vcihuICogdSArIDEpDQogICAgeSA8LSBjKHhbaV0pDQogICAgaiA8LSBqICsgMQ0KICB9DQogIA0KICB0aGV0YV9oYXRba10gPC0gbWVhbih5KSAvIG4NCiAgayA8LSBrICsgMQ0KfQ0KDQp0aGV0YV9zdGFyIDwtIG1lYW4odGhldGFfaGF0KQ0KYmlhc19oYXQgPC0gdGhldGFfc3RhciAtIHRoZXRhDQp2YXJpYW5jZV9oYXQgPC0gdmFyKHRoZXRhX2hhdCkNCm1zZV9oYXQgPC0gdmFyaWFuY2VfaGF0ICsgYmlhc19oYXReMg0KYGBgDQoNCiMgSmFja25pZmUgTWV0aG9kDQpgYGB7cn0NCnNldC5zZWVkKDEyMykNCg0KIyB4IGlzIHNvbWUgdmVjdG9yDQp4IDwtIGMoMSwyLDMpDQp0aGV0YSA8LSBtZWFuKHgpDQp0aGV0YV9zdGFyIDwtIHZlY3RvcigpDQpuIDwtIGxlbmd0aCh4KQ0KDQpmb3IgKGkgaW4gKDE6bikpew0KICB5IDwtIHhbLWldDQogIHRoZXRhX2hhdFtpXSA8LSBtZWFuKHkpDQp9DQoNCnRoZXRhX2Jhcl9zdGFyIDwtIG1lYW4odGhldGFfaGF0KQ0KYmlhc19oYXQgPC0gKG4gLSAxKSAqICh0aGV0YV9iYXJfc3RhciAtIHRoZXRhKQ0KYWRqdXN0ZWRfZXN0aW1hdG9yIDwtIHRoZXRhX2hhdCAtIGJpYXNfaGF0DQp2YXJpYW5jZV9oYXQgPC0gdmFyKHRoZXRhX2hhdCkNCm1zZV9oYXQgPC0gdmFyaWFuY2VfaGF0ICsgYmlhc19oYXQgXiAyDQpgYGANCg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpQYWdlIDMNCmBgYHtyfQ0Kc2V0LnNlZWQoMTI4KQ0KbiA8LSAzMA0KUyA8LSAwDQpJIDwtIDANCg0Kd2hpbGUgKEk8bikNCnsNCiAgdSA8LSBydW5pZigxKQ0KICBJIDwtIEkgKyAxDQogIFMgPC0gUyArIGV4cChleHAodSkpICMgeW91ciBmdW5jdGlvbg0KfQ0KDQpTIC8gbg0KYGBgDQpgYGB7cn0NCiNwYWdlIDMNCnNldC5zZWVkKDEyOCkNCm4gPC0gMzAwMDANClMgPC0gMA0KSSA8LSAwDQoNCnUgPC0gcnVuaWYobikNClMgPC0gbWVhbihleHAoZXhwKHUpKSkNClMgDQpgYGANCiMgcGFnZSA4DQpgYGB7cn0NCnNldC5zZWVkKDEyOCkNCm4gPC0gMjAwMA0KdTEgPC0gIHJ1bmlmKG4pDQp1MiA8LSBydW5pZihuKQ0KTSA8LSBleHAoZXhwKDEpKQ0KZyA8LSBleHAoZXhwKHUxKSkNCm5hIDwtIHN1bSh1MiA8PSAoZy9NKSkgIyBzY2FsZSBieSBNIGZvciByYW5nZSBvZiAwIHRvIDENCkkgPC0gbmEqIE0gLyBuICMgcmVzY2FsZSBsYXRlcg0KSQ0KYGBgDQpgYGB7cn0NCnNldC5zZWVkKDEyOCkNCm4gPC0gMjAwMDAwDQp1MSA8LSAgcnVuaWYobikNCnUyIDwtIHJ1bmlmKG4pDQoNCnggPC0gMip1MSAtIDENCnkgPC0gMip1MiAtIDENCnogPC0gaWZlbHNlKCh4XjIgKyB5XjIpIDw9MSwgMSwgMCkNCm5hIDwtIHN1bSh6KQ0KSSA8LSBuYSAvIG4NCkkqNA0KcGkNCmBgYA0KDQo=</div>
 
 
 
@@ -554,7 +347,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("lecture_09.Rmd");
+  window.initializeSourceEmbed("lecture_11.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>

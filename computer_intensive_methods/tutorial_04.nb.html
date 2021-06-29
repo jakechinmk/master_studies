@@ -215,6 +215,37 @@ pre code {
 
 
 <!-- rnb-text-begin -->
+<p><a href="http://sas.uwaterloo.ca/~dlmcleis/s906/probsolutions.pdf" class="uri">http://sas.uwaterloo.ca/~dlmcleis/s906/probsolutions.pdf</a> # Q1</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTIzKVxuXG5kIDwtIDAuMDFcbm4gPC0gMlxueSA8LSBydW5pZihuKVxuXG53aGlsZSAoc2QoeSkvc3FydChuKSA+IGQpe1xuXG4gIHkxIDwtIHJ1bmlmKDEpXG4gIHkgPC0gYyh5LCB5MSlcbiAgbiA8LSBsZW5ndGgoeSlcbn1cbm1lYW4oeSlcbmBgYCJ9 -->
+<pre class="r"><code>set.seed(123)
+
+d &lt;- 0.01
+n &lt;- 2
+y &lt;- runif(n)
+
+while (sd(y)/sqrt(n) &gt; d){
+
+  y1 &lt;- runif(1)
+  y &lt;- c(y, y1)
+  n &lt;- length(y)
+}
+mean(y)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNDk2OTE3M1xuIn0= -->
+<pre><code>[1] 0.4969173</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVuZ3RoKHkpXG5gYGAifQ== -->
+<pre class="r"><code>length(y)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDgyM1xuIn0= -->
+<pre><code>[1] 823</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="q2" class="section level1">
+<h1>Q2</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMjU2KVxuXG4jIG9yaWdpbmFsIHNhbXBsZVxueCA8LSBjKDQsNSw5LDMsMjAsMTYsMTEsMjAsNyw5LDE4LDE0LDE2LDE5LDgpXG5uIDwtIGxlbmd0aCh4KVxudGhldGEgPC0gdmFyKHgpXG5rIDwtIDFcblxudGhldGFfc3RhciA8LSB2ZWN0b3IoKVxueSA8LSB2ZWN0b3IoKVxuTiA8LSAxMDAwXG5cbndoaWxlIChrIDw9IE4pe1xuICBqIDwtIDFcbiAgd2hpbGUgKGogPD0gbil7XG4gICAgIyBzYW1wbGUgZnJvbSB0aGUgb3JpZ2luYWwgc2FtcGxlXG4gICAgaSA8LSBmbG9vcihuKnJ1bmlmKDEpICsxKVxuICAgIHlbal0gPC0geFtpXVxuICAgIFxuICAgIGogPC0gaiArIDFcbiAgfVxuICB0aGV0YV9zdGFyW2tdIDwtIHZhcih5KVxuICBrIDwtIGsgKzFcbiAgXG5cbn1cblxuYmlhcyA8LSBtZWFuKHRoZXRhX3N0YXIpIC0gdGhldGFcbiMgdmFyaGF0IDwtIHN1bSgodGhldGFfc3RhciAtIG1lYW4odGhldGFfc3RhcikpXjIpIC8gbGVuZ3RoKHRoZXRhX3N0YXIpXG52YXJoYXQgPC0gdmFyKHRoZXRhX3N0YXIpXG5tc2UgPC0gdmFyaGF0ICsgYmlhc14yXG5cbmJpYXNcbmBgYCJ9 -->
@@ -269,9 +300,153 @@ bias</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+</div>
+<div id="q2-self-code" class="section level1">
+<h1>Q2 self code</h1>
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMjU2KVxuXG4jIHggaXMgc29tZSB2ZWN0b3JcbnggPC0gYyg0LDUsOSwzLDIwLDE2LDExLDIwLDcsOSwxOCwxNCwxNiwxOSw4KVxuXG4jIHNhbXBsZSBzaXplIG9mIGJvb3RzdHJhcCBzYW1wbGVcbm4gPC0gbGVuZ3RoKHgpXG5cbiMgbnVtYmVyIG9mIGJvb3RzdHJhcCBzYW1wbGVcbk4gPC0gMTAwMFxudGhldGEgPC0gdmFyKHgpIFxuayA8LSAxXG50aGV0YV9zdGFyIDwtIHZlY3RvcigpXG55IDwtIHZlY3RvcigpXG5cbndoaWxlIChrIDw9IE4pe1xuICBqIDwtIDFcbiAgd2hpbGUgKGogPD0gbil7XG4gICAgaSA8LSBmbG9vcihuICogcnVuaWYoMSkgKyAxKVxuICAgIHlbal0gPC0geFtpXVxuICAgIGogPC0gaiArIDFcbiAgfVxuICBcbiAgdGhldGFfc3RhcltrXSA8LSB2YXIoeSlcbiAgayA8LSBrICsgMVxufVxuXG5iaWFzX2hhdCA8LSBtZWFuKHRoZXRhX3N0YXIpIC0gdGhldGFcbnZhcmlhbmNlX2hhdCA8LSB2YXIodGhldGFfc3Rhcilcbm1zZV9oYXQgPC0gdmFyaWFuY2VfaGF0ICsgYmlhc19oYXReMlxuXG5iaWFzX2hhdFxuYGBgIn0= -->
+<pre class="r"><code>set.seed(256)
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7cn0NCnNldC5zZWVkKDI1NikNCg0KIyBvcmlnaW5hbCBzYW1wbGUNCnggPC0gYyg0LDUsOSwzLDIwLDE2LDExLDIwLDcsOSwxOCwxNCwxNiwxOSw4KQ0KbiA8LSBsZW5ndGgoeCkNCnRoZXRhIDwtIHZhcih4KQ0KayA8LSAxDQoNCnRoZXRhX3N0YXIgPC0gdmVjdG9yKCkNCnkgPC0gdmVjdG9yKCkNCk4gPC0gMTAwMA0KDQp3aGlsZSAoayA8PSBOKXsNCiAgaiA8LSAxDQogIHdoaWxlIChqIDw9IG4pew0KICAgICMgc2FtcGxlIGZyb20gdGhlIG9yaWdpbmFsIHNhbXBsZQ0KICAgIGkgPC0gZmxvb3IobipydW5pZigxKSArMSkNCiAgICB5W2pdIDwtIHhbaV0NCiAgICANCiAgICBqIDwtIGogKyAxDQogIH0NCiAgdGhldGFfc3RhcltrXSA8LSB2YXIoeSkNCiAgayA8LSBrICsxDQogIA0KDQp9DQoNCmJpYXMgPC0gbWVhbih0aGV0YV9zdGFyKSAtIHRoZXRhDQojIHZhcmhhdCA8LSBzdW0oKHRoZXRhX3N0YXIgLSBtZWFuKHRoZXRhX3N0YXIpKV4yKSAvIGxlbmd0aCh0aGV0YV9zdGFyKQ0KdmFyaGF0IDwtIHZhcih0aGV0YV9zdGFyKQ0KbXNlIDwtIHZhcmhhdCArIGJpYXNeMg0KDQpiaWFzDQp2YXJoYXQNCm1zZQ0KYGBgDQoNCg0KDQoNCg0K</div>
+# x is some vector
+x &lt;- c(4,5,9,3,20,16,11,20,7,9,18,14,16,19,8)
+
+# sample size of bootstrap sample
+n &lt;- length(x)
+
+# number of bootstrap sample
+N &lt;- 1000
+theta &lt;- var(x) 
+k &lt;- 1
+theta_star &lt;- vector()
+y &lt;- vector()
+
+while (k &lt;= N){
+  j &lt;- 1
+  while (j &lt;= n){
+    i &lt;- floor(n * runif(1) + 1)
+    y[j] &lt;- x[i]
+    j &lt;- j + 1
+  }
+  
+  theta_star[k] &lt;- var(y)
+  k &lt;- k + 1
+}
+
+bias_hat &lt;- mean(theta_star) - theta
+variance_hat &lt;- var(theta_star)
+mse_hat &lt;- variance_hat + bias_hat^2
+
+bias_hat</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIC0yLjU4MDIzOFxuIn0= -->
+<pre><code>[1] -2.580238</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFuY2VfaGF0XG5gYGAifQ== -->
+<pre class="r"><code>variance_hat</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDU3LjY5NDU0XG4ifQ== -->
+<pre><code>[1] 57.69454</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXNlX2hhdFxuYGBgIn0= -->
+<pre class="r"><code>mse_hat</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDY0LjM1MjE3XG4ifQ== -->
+<pre><code>[1] 64.35217</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="q3" class="section level1">
+<h1>Q3</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTIzKVxuXG4jIHggaXMgc29tZSB2ZWN0b3JcbnggPC0gYyg0LDUsOSwzLDIwLDE2LDExLDIwLDcsOSwxOCwxNCwxNiwxOSw4KVxudGhldGEgPC0gdmFyKHgpXG50aGV0YV9oYXQgPC0gdmVjdG9yKClcbm4gPC0gbGVuZ3RoKHgpXG5cbmZvciAoaSBpbiAoMTpuKSl7XG4gIHkgPC0geFstaV1cbiAgdGhldGFfaGF0W2ldIDwtIHZhcih5KVxufVxuXG5iaWFzX2hhdCA8LSAobiAtIDEpICogKG1lYW4odGhldGFfaGF0KSAtIHRoZXRhKVxuYWRqdXN0ZWRfZXN0aW1hdG9yIDwtIHRoZXRhIC0gYmlhc19oYXRcbnZhcmlhbmNlX2hhdCA8LSAobi0xKSAqIHZhcih0aGV0YV9zdGFyKVxuIyB2YXJpYW5jZV9oYXQgPC0gKChuLTEpIC8gbikgKiBzdW0oKHRoZXRhX2hhdCAtIG1lYW4odGhldGFfaGF0KSleMilcbm1zZV9oYXQgPC0gdmFyaWFuY2VfaGF0ICsgYmlhc19oYXQgXiAyXG5cbmJpYXNfaGF0XG5gYGAifQ== -->
+<pre class="r"><code>set.seed(123)
+
+# x is some vector
+x &lt;- c(4,5,9,3,20,16,11,20,7,9,18,14,16,19,8)
+theta &lt;- var(x)
+theta_hat &lt;- vector()
+n &lt;- length(x)
+
+for (i in (1:n)){
+  y &lt;- x[-i]
+  theta_hat[i] &lt;- var(y)
+}
+
+bias_hat &lt;- (n - 1) * (mean(theta_hat) - theta)
+adjusted_estimator &lt;- theta - bias_hat
+variance_hat &lt;- (n-1) * var(theta_star)
+# variance_hat &lt;- ((n-1) / n) * sum((theta_hat - mean(theta_hat))^2)
+mse_hat &lt;- variance_hat + bias_hat ^ 2
+
+bias_hat</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDBcbiJ9 -->
+<pre><code>[1] 0</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFuY2VfaGF0XG5gYGAifQ== -->
+<pre class="r"><code>variance_hat</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDY1LjQ4NDk2XG4ifQ== -->
+<pre><code>[1] 65.48496</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXNlX2hhdFxuYGBgIn0= -->
+<pre class="r"><code>mse_hat</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDY1LjQ4NDk2XG4ifQ== -->
+<pre><code>[1] 65.48496</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="q4" class="section level1">
+<h1>Q4</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTIzKVxudGhldGEgPC0gMzY1XG5uIDwtIDIwXG5rIDwtIDEwMDBcbnRoZXRhMSA8LSBjKDApXG50aGV0YTIgPC0gYygwKVxuXG5mb3IgKGogaW4gMTprKXtcbiAgdSA8LSBydW5pZigxKVxuICB1MSA8LSBydW5pZigxKVxuICB1MiA8LSBydW5pZigxKVxuICB0aGV0YTFbal0gPC0gKGV4cCh1XjIpKigxICsgZXhwKDEtMip1KSkpIC8gMlxuICB0aGV0YTJbal0gPC0gKGV4cCh1MV4yKSArIGV4cCh1Ml4yKSkgLyAyIFxufVxuXG5tc2UxIDwtIHN1bSgodGhldGExIC0gdGhldGEpXjIpIC8ga1xubXNlMiA8LSBzdW0oKHRoZXRhMiAtIHRoZXRhKV4yKSAvIGtcbmVmZiA8LSBtc2UyIC8gbXNlMVxubXNlMVxuYGBgIn0= -->
+<pre class="r"><code>set.seed(123)
+theta &lt;- 365
+n &lt;- 20
+k &lt;- 1000
+theta1 &lt;- c(0)
+theta2 &lt;- c(0)
+
+for (j in 1:k){
+  u &lt;- runif(1)
+  u1 &lt;- runif(1)
+  u2 &lt;- runif(1)
+  theta1[j] &lt;- (exp(u^2)*(1 + exp(1-2*u))) / 2
+  theta2[j] &lt;- (exp(u1^2) + exp(u2^2)) / 2 
+}
+
+mse1 &lt;- sum((theta1 - theta)^2) / k
+mse2 &lt;- sum((theta2 - theta)^2) / k
+eff &lt;- mse2 / mse1
+mse1</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEzMjE2My42XG4ifQ== -->
+<pre><code>[1] 132163.6</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXNlMlxuYGBgIn0= -->
+<pre class="r"><code>mse2</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEzMjE1OC45XG4ifQ== -->
+<pre><code>[1] 132158.9</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZWZmXG5gYGAifQ== -->
+<pre class="r"><code>eff</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuOTk5OTY1XG4ifQ== -->
+<pre><code>[1] 0.999965</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+</div>
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpodHRwOi8vc2FzLnV3YXRlcmxvby5jYS9+ZGxtY2xlaXMvczkwNi9wcm9ic29sdXRpb25zLnBkZg0KIyBRMQ0KYGBge3J9DQpzZXQuc2VlZCgxMjMpDQoNCg0KYGBgDQoNCg0KDQoNCg0KIyBRMg0KYGBge3J9DQpzZXQuc2VlZCgyNTYpDQoNCiMgb3JpZ2luYWwgc2FtcGxlDQp4IDwtIGMoNCw1LDksMywyMCwxNiwxMSwyMCw3LDksMTgsMTQsMTYsMTksOCkNCm4gPC0gbGVuZ3RoKHgpDQp0aGV0YSA8LSB2YXIoeCkNCmsgPC0gMQ0KDQp0aGV0YV9zdGFyIDwtIHZlY3RvcigpDQp5IDwtIHZlY3RvcigpDQpOIDwtIDEwMDANCg0Kd2hpbGUgKGsgPD0gTil7DQogIGogPC0gMQ0KICB3aGlsZSAoaiA8PSBuKXsNCiAgICAjIHNhbXBsZSBmcm9tIHRoZSBvcmlnaW5hbCBzYW1wbGUNCiAgICBpIDwtIGZsb29yKG4qcnVuaWYoMSkgKzEpDQogICAgeVtqXSA8LSB4W2ldDQogICAgDQogICAgaiA8LSBqICsgMQ0KICB9DQogIHRoZXRhX3N0YXJba10gPC0gdmFyKHkpDQogIGsgPC0gayArMQ0KICANCg0KfQ0KDQpiaWFzIDwtIG1lYW4odGhldGFfc3RhcikgLSB0aGV0YQ0KIyB2YXJoYXQgPC0gc3VtKCh0aGV0YV9zdGFyIC0gbWVhbih0aGV0YV9zdGFyKSleMikgLyBsZW5ndGgodGhldGFfc3RhcikNCnZhcmhhdCA8LSB2YXIodGhldGFfc3RhcikNCm1zZSA8LSB2YXJoYXQgKyBiaWFzXjINCg0KYmlhcw0KdmFyaGF0DQptc2UNCmBgYA0KIyBRMiBzZWxmIGNvZGUNCmBgYHtyfQ0Kc2V0LnNlZWQoMjU2KQ0KDQojIHggaXMgc29tZSB2ZWN0b3INCnggPC0gYyg0LDUsOSwzLDIwLDE2LDExLDIwLDcsOSwxOCwxNCwxNiwxOSw4KQ0KDQojIHNhbXBsZSBzaXplIG9mIGJvb3RzdHJhcCBzYW1wbGUNCm4gPC0gbGVuZ3RoKHgpDQoNCiMgbnVtYmVyIG9mIGJvb3RzdHJhcCBzYW1wbGUNCk4gPC0gMTAwMA0KdGhldGEgPC0gdmFyKHgpIA0KayA8LSAxDQp0aGV0YV9zdGFyIDwtIHZlY3RvcigpDQp5IDwtIHZlY3RvcigpDQoNCndoaWxlIChrIDw9IE4pew0KICBqIDwtIDENCiAgd2hpbGUgKGogPD0gbil7DQogICAgaSA8LSBmbG9vcihuICogcnVuaWYoMSkgKyAxKQ0KICAgIHlbal0gPC0geFtpXQ0KICAgIGogPC0gaiArIDENCiAgfQ0KICANCiAgdGhldGFfc3RhcltrXSA8LSB2YXIoeSkNCiAgayA8LSBrICsgMQ0KfQ0KDQpiaWFzX2hhdCA8LSBtZWFuKHRoZXRhX3N0YXIpIC0gdGhldGENCnZhcmlhbmNlX2hhdCA8LSB2YXIodGhldGFfc3RhcikNCm1zZV9oYXQgPC0gdmFyaWFuY2VfaGF0ICsgYmlhc19oYXReMg0KDQpiaWFzX2hhdA0KdmFyaWFuY2VfaGF0DQptc2VfaGF0DQpgYGANCiMgUTMNCmBgYHtyfQ0Kc2V0LnNlZWQoMTIzKQ0KDQojIHggaXMgc29tZSB2ZWN0b3INCnggPC0gYyg0LDUsOSwzLDIwLDE2LDExLDIwLDcsOSwxOCwxNCwxNiwxOSw4KQ0KdGhldGEgPC0gdmFyKHgpDQp0aGV0YV9oYXQgPC0gdmVjdG9yKCkNCm4gPC0gbGVuZ3RoKHgpDQoNCmZvciAoaSBpbiAoMTpuKSl7DQogIHkgPC0geFstaV0NCiAgdGhldGFfaGF0W2ldIDwtIHZhcih5KQ0KfQ0KDQpiaWFzX2hhdCA8LSAobiAtIDEpICogKG1lYW4odGhldGFfaGF0KSAtIHRoZXRhKQ0KYWRqdXN0ZWRfZXN0aW1hdG9yIDwtIHRoZXRhIC0gYmlhc19oYXQNCnZhcmlhbmNlX2hhdCA8LSAobi0xKSAqIHZhcih0aGV0YV9zdGFyKQ0KIyB2YXJpYW5jZV9oYXQgPC0gKChuLTEpIC8gbikgKiBzdW0oKHRoZXRhX2hhdCAtIG1lYW4odGhldGFfaGF0KSleMikNCm1zZV9oYXQgPC0gdmFyaWFuY2VfaGF0ICsgYmlhc19oYXQgXiAyDQoNCmJpYXNfaGF0DQp2YXJpYW5jZV9oYXQNCm1zZV9oYXQNCmBgYA0KIyBRNA0KYGBge3J9DQpzZXQuc2VlZCgxMjMpDQp0aGV0YSA8LSAzNjUNCm4gPC0gMjANCmsgPC0gMTAwMA0KdGhldGExIDwtIGMoMCkNCnRoZXRhMiA8LSBjKDApDQoNCmZvciAoaiBpbiAxOmspew0KICB1IDwtIHJ1bmlmKDEpDQogIHUxIDwtIHJ1bmlmKDEpDQogIHUyIDwtIHJ1bmlmKDEpDQogIHRoZXRhMVtqXSA8LSAoZXhwKHVeMikqKDEgKyBleHAoMS0yKnUpKSkgLyAyDQogIHRoZXRhMltqXSA8LSAoZXhwKHUxXjIpICsgZXhwKHUyXjIpKSAvIDIgDQp9DQoNCm1zZTEgPC0gc3VtKCh0aGV0YTEgLSB0aGV0YSleMikgLyBrDQptc2UyIDwtIHN1bSgodGhldGEyIC0gdGhldGEpXjIpIC8gaw0KZWZmIDwtIG1zZTIgLyBtc2UxDQptc2UxDQptc2UyDQplZmYNCmBgYA0KDQoNCg0K</div>
 
 
 

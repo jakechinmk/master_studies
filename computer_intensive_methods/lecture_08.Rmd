@@ -1,15 +1,144 @@
 ---
-title: "R Notebook"
+title: "Week 8"
 output: html_notebook
 ---
 
+# Multiple Linear Regression
+https://rpubs.com/aaronsc32/qr-decomposition-householder
+https://rstudio-pubs-static.s3.amazonaws.com/411746_dc0e5da6c76a4182993dabe5cc7bdece.html
+
+```{r}
+library(Matrix)
+qr.householder <- function(A){
+  R <- as.matrix(A)
+  
+  n <- ncol(A)
+  m <- nrow(A)
+  H <- list()
+  
+  c <- ifelse(m>n, n, m)
+  
+  for (k in 1:c){
+    x <- R[k:m, k]
+    e <- as.matrix(c(1, rep(0, length(x) - 1)))
+    vk <- sign(x[1]) * sqrt(sum(x^2)) * e + x
+    
+    hk <- diag(length(x)) - 2 * as.vector(vk %*% t(vk)) / (t(vk) %*%vk)
+    
+    if (k > 1){
+      hk <- bdiag(diag(k-1), hk)
+    }
+    
+    H[[k]] <- hk
+    R <- hk %*% R
+  }
+  Q <- Reduce("%*%", H)
+  res <- list('Q'=Q, 'R'=R)
+  return(res)
+}
+```
+
+
+```{r}
+A <- matrix(c(2,-2,18,2,1,0,1,2,0),nrow = 3, byrow = T) 
+A
+qr.householder(A)
+```
+```{r}
+Householder <- function(x)
+{
+  s <- sign(x[1]) * c(sqrt(t(x) %*% x))
+  nn <- length(x)
+  e1 <- rep(0, nn)
+  e1[1] <- 1
+  u <- x + s * e1
+  d <- 2 / c(t(u) %*% u)
+  U <- diag(nn) - outer(d*u, u)
+  list(U = U, u = u/s)
+}
+
+HouseReg <- function(X, y) {
+  p <- ncol(X)
+  n <- nrow(X)
+  Xy <- cbind(X, y)
+
+  u <- as.list(1:p)
+
+  # initialization
+  temp.hh <- Householder(X[,1])
+  U <- temp.hh$U
+  u[[1]] <- temp.hh$u
+
+
+  for (i in 2:p) {
+    x <- (U %*% X)[i:n,i]
+    temp.hh <- Householder(x)
+    u[[i]] <- temp.hh$u
+    temp.U <- temp.hh$U
+    temp.I <- diag(i-1)
+    temp.01 <- matrix(0, i-1, n - i +1)
+    temp.02 <- matrix(0, n - i + 1, i-1)
+    U <- rbind(cbind(temp.I, temp.01), cbind(temp.02, temp.U)) %*% U 
+  }
+
+  temp <- U %*% Xy
+  R <- temp[1:p,1:p]
+  z1 <- temp[1:p,p+1]
+  z2 <- temp[-(1:p),p+1]
+
+  obj <- list(U = U, R = R, z = c(z1, z2), z1 = z1, z2 = z2, u = u)
+}
+```
+
+```{r}
+X <- cbind(rep(1, 6), 1:6, (1:6)^2)
+y <- c(4.5, 5.5, 6.5, 8, 10, 12)
+p <- ncol(X)
+n <- nrow(X)
+Xy <- cbind(X, y)
+u <- as.list(1:p)
+Xy
+u <- as.list(1:p)
+
+# initialization
+temp.hh <- Householder(X[,1])
+U <- temp.hh$U
+u[[1]] <- temp.hh$u
+
+
+for (i in 2:p) {
+  x <- (U %*% X)[i:n,i]
+  temp.hh <- Householder(x)
+  u[[i]] <- temp.hh$u
+  temp.U <- temp.hh$U
+  temp.I <- diag(i-1)
+  temp.01 <- matrix(0, i-1, n - i +1)
+  temp.02 <- matrix(0, n - i + 1, i-1)
+  U <- rbind(cbind(temp.I, temp.01), cbind(temp.02, temp.U)) %*% U
+}
+U
+
+temp <- U %*% Xy
+R <- temp[1:p,1:p]
+z1 <- temp[1:p,p+1]
+z2 <- temp[-(1:p),p+1]
+obj <- list(U = U, R = R, z = c(z1, z2), z1 = z1, z2 = z2, u = u)
+hat.beta <- backsolve(R, z1)
+SSE <- sum((obj$z2)^2)
+SSR <- sum((obj$z1)^2)
+
+SSR
+sum((R %*% hat.beta)^2)
+```
+# Computational Methods in Nonlinear Regression 
+
 ```{r}
 g <- matrix(c(802, -400, -400, 200), nrow=2)
-
 theta <- c(1, -1.2)
 tol <- 1.0e-6
 f <- matrix(c(0,0), nrow=2)
 err <- c(1, 1)
+
 while(any(err>tol)){
   f[1] <- sqrt(200) * (theta[2] - theta[1]^2)
   f[2] <- sqrt(2) * (1- theta[1])

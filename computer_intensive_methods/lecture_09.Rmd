@@ -3,7 +3,8 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-Guided Exercise
+# Guided Exercise (Page 5)
+s is the variance
 ```{r}
 x <- c(2, 10, 4, 7)
 m <- c(x[1])
@@ -18,8 +19,8 @@ m
 s
 ```
 
-Exercise
-mean = 3, meant for the paramter is = 1/3
+# Exercise (Page 5)
+mean = 3, meant for the parameter is = 1/3
 ```{r}
 set.seed(128)
 
@@ -29,6 +30,7 @@ y <- rexp(n, rate=1/3)
 sd(y)
 
 while (sd(y)/sqrt(n) > d){
+
   y1 <- rexp(1, rate=1/3)
   y <- c(y, y1)
   n <- length(y)
@@ -36,25 +38,31 @@ while (sd(y)/sqrt(n) > d){
 mean(y)
 length(y)
 ```
+
+# Exercise (Page 5) with recurrence
 ```{r}
 set.seed(128)
+
 d <- 0.05
 n <- 30
 y <- rexp(n, rate=1/3)
-
+v <- c(var(y))
 m <- c(mean(y))
-s <- c(sd(y))
+i <- 1
 
-while ((s[length(s)] / sqrt(n)) > d){
+while (sqrt(v[i])/sqrt(n) > d){
   y1 <- rexp(1, rate=1/3)
   y <- c(y, y1)
-
-  
+  n <- length(y)
+  m[i + 1] <- m[i] + (y[n] - m[i]) / n
+  v[i + 1] <- (1 - 1/(n-1))*v[i] + n * (m[i+1] - m[i])^2
+  i <- i + 1
 }
 mean(y)
 length(y)
 ```
-Monte Carlo Simulation
+
+# Monte Carlo Simulation (Page 6 - 7)
 ```{r}
 set.seed(123)
 theta <- 365
@@ -77,12 +85,107 @@ mse2
 eff
 ```
 The one with smaller mse will be the better estimator. Hence MSE for theta 1 is a far lower. Hence theta 1 is better estimator. We can use eff to evaluate the estimator.
-
 ```{r}
+set.seed(123)
+theta <- 365
+n <- 50
+k <- 1000
+theta1 <- c(0)
+theta2 <- c(0)
+
+for (j in 1:k){
+  x <- rexp(n, 1/theta)
+  theta1[j] <- 2*mean(x) - 1
+  theta2[j] <- ((n+1)*max(x)/n) - 1
+}
+
+mse1 <- sum((theta1 - theta)^2) / k
+mse2 <- sum((theta2 - theta)^2) / k
+eff <- mse2 / mse1
+mse1
+mse2
+eff
+```
+```{r}
+set.seed(123)
+theta <- 365
+n <- 100
+k <- 1000
+theta1 <- c(0)
+theta2 <- c(0)
+
+for (j in 1:k){
+  x <- rexp(n, 1/theta)
+  theta1[j] <- 2*mean(x) - 1
+  theta2[j] <- ((n+1)*max(x)/n) - 1
+}
+
+mse1 <- sum((theta1 - theta)^2) / k
+mse2 <- sum((theta2 - theta)^2) / k
+eff <- mse2 / mse1
+mse1
+mse2
+eff
+```
+the mse1 getting lower as the sample size increasing.
+
+
+# Bootstrap Sample
+- N is number of bootstrap sample
+- n is sample size of each bootstrap sample
+```{r}
+set.seed(123)
+
+# x is some vector
+x <- c(1,2,3)
+
+# sample size of booststrap sample
+n <- 5
+
+# number of bootstrap sample
+N <- 100
+theta <- mean(x) 
 k <- 1
-j <- 1
+theta_hat <- vector()
 u <- runif(1)
 
+while (k <= N){
+  j <- 1
+  while (j <= n){
+    i <- floor(n * u + 1)
+    y <- c(x[i])
+    j <- j + 1
+  }
+  
+  theta_hat[k] <- mean(y) / n
+  k <- k + 1
+}
 
+theta_star <- mean(theta_hat)
+bias_hat <- theta_star - theta
+variance_hat <- var(theta_hat)
+mse_hat <- variance_hat + bias_hat^2
+```
+
+# Jacknife Method
+```{r}
+set.seed(123)
+
+# x is some vector
+x <- c(1,2,3)
+theta <- mean(x)
+theta_star <- vector()
+n <- length(x)
+
+for (i in (1:n)){
+  y <- x[-i]
+  theta_hat[i] <- mean(y)
+}
+
+theta_bar_star <- mean(theta_hat)
+bias_hat <- (n - 1) * (theta_bar_star - theta)
+adjusted_estimator <- theta_hat - bias_hat
+variance_hat <- var(theta_hat)
+mse_hat <- variance_hat + bias_hat ^ 2
 ```
 

@@ -3,6 +3,19 @@ title: "R Notebook"
 output: html_notebook
 ---
 
+http://sas.uwaterloo.ca/~dlmcleis/s906/probsolutions.pdf
+# Q1
+```{r}
+set.seed(123)
+
+
+```
+
+
+
+
+
+# Q2
 ```{r}
 set.seed(256)
 
@@ -40,8 +53,92 @@ bias
 varhat
 mse
 ```
+# Q2 self code
+```{r}
+set.seed(256)
 
+# x is some vector
+x <- c(4,5,9,3,20,16,11,20,7,9,18,14,16,19,8)
 
+# sample size of bootstrap sample
+n <- length(x)
+
+# number of bootstrap sample
+N <- 1000
+theta <- var(x) 
+k <- 1
+theta_star <- vector()
+y <- vector()
+
+while (k <= N){
+  j <- 1
+  while (j <= n){
+    i <- floor(n * runif(1) + 1)
+    y[j] <- x[i]
+    j <- j + 1
+  }
+  
+  theta_star[k] <- var(y)
+  k <- k + 1
+}
+
+bias_hat <- mean(theta_star) - theta
+variance_hat <- var(theta_star)
+mse_hat <- variance_hat + bias_hat^2
+
+bias_hat
+variance_hat
+mse_hat
+```
+# Q3
+```{r}
+set.seed(123)
+
+# x is some vector
+x <- c(4,5,9,3,20,16,11,20,7,9,18,14,16,19,8)
+theta <- var(x)
+theta_hat <- vector()
+n <- length(x)
+
+for (i in (1:n)){
+  y <- x[-i]
+  theta_hat[i] <- var(y)
+}
+
+bias_hat <- (n - 1) * (mean(theta_hat) - theta)
+adjusted_estimator <- theta - bias_hat
+variance_hat <- (n-1) * var(theta_star)
+# variance_hat <- ((n-1) / n) * sum((theta_hat - mean(theta_hat))^2)
+mse_hat <- variance_hat + bias_hat ^ 2
+
+bias_hat
+variance_hat
+mse_hat
+```
+# Q4
+```{r}
+set.seed(123)
+theta <- 365
+n <- 20
+k <- 1000
+theta1 <- c(0)
+theta2 <- c(0)
+
+for (j in 1:k){
+  u <- runif(1)
+  u1 <- runif(1)
+  u2 <- runif(1)
+  theta1[j] <- (exp(u^2)*(1 + exp(1-2*u))) / 2
+  theta2[j] <- (exp(u1^2) + exp(u2^2)) / 2 
+}
+
+mse1 <- sum((theta1 - theta)^2) / k
+mse2 <- sum((theta2 - theta)^2) / k
+eff <- mse2 / mse1
+mse1
+mse2
+eff
+```
 
 
 
